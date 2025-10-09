@@ -1,23 +1,10 @@
-// import { bootstrapApplication } from '@angular/platform-browser';
-// import { appConfig } from './app/app.config';
-// import { App } from './app/app';
-
-// bootstrapApplication(App, appConfig)
-//   .catch((err) => console.error(err));
-
-
-// src/main.ts
+import 'zone.js';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { App } from './app/app';
 import { importProvidersFrom } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { provideRouter } from '@angular/router';
-import { routes } from './app/app.routes';
+import { HttpClientModule } from '@angular/common/http'; // ✅ HttpClient pour tout le projet
 
 bootstrapApplication(App, {
-  providers: [
-    importProvidersFrom(FormsModule, ReactiveFormsModule),
-    provideRouter(routes)
-  ]
-});
-
+  providers: [importProvidersFrom(HttpClientModule)] // ✅ rend HttpClient disponible
+})
+.catch(err => console.error(err));
