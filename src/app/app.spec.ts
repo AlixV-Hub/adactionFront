@@ -4,7 +4,7 @@ import { App } from './app';
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [App] // pas besoin de RouterTestingModule
+      imports: [App] 
     }).compileComponents();
   });
 

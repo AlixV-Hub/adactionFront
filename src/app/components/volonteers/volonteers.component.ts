@@ -12,8 +12,8 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class VolonteersComponent implements OnInit {
   volonteers: Volonteer[] = [];
-  loading: boolean = true;        // <- ajouté
-  errorMessage: string = '';       // <- ajoutée
+  loading: boolean = true;      
+  errorMessage: string = '';       
 
   constructor(private volonteerService: AddVolonteerService) {}
 
