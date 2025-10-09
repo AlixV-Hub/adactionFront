@@ -7,12 +7,7 @@
 </section>
 
 <ul *ngIf="!loading && !errorMessage" class="volonteer-list">
-  <li *ngFor="let v of volonteers" class="volonteer-item">
-    <div class="name">{{ v.firstname }} {{ v.lastname }}</div>
-    <div class="location">📍 {{ v.location }}</div>
-    <div class="email">✉️ {{ v.email }}</div>
-    <div *ngIf="v.createdAt" class="date">
-      Créé le : {{ v.createdAt | date : 'short' }}
-    </div>
+  <li *ngFor="let v of volonteers">
+    {{ v.firstname }} {{ v.lastname }} - {{ v.location }} - {{ v.email }}
   </li>
 </ul>

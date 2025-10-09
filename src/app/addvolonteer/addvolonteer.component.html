@@ -1,0 +1,15 @@
+<form [formGroup]="volonteerForm" (ngSubmit)="onSubmit()">
+  <label>Prénom :</label>
+  <input formControlName="firstname" placeholder="Prénom" />
+
+  <label>Nom :</label>
+  <input formControlName="lastname" placeholder="Nom" />
+
+  <label>Localisation :</label>
+  <input formControlName="location" placeholder="Ville, pays..." />
+
+  <label>Email :</label>
+  <input formControlName="email" placeholder="email@example.com" />
+
+  <button type="submit">Ajouter volontaire</button>
+</form>

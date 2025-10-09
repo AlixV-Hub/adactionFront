@@ -1,38 +1,40 @@
-import { Component, OnInit, importProvidersFrom } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VolonteerService } from '../../services/volonteer.service';
-import { Volonteer } from '../../models/volonteer.model';
+import { AddVolonteerService, Volonteer } from '../../services/addvolonteer.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-volonteers',
   standalone: true,
-  imports: [CommonModule], // ✅ Important pour *ngIf, *ngFor et HttpClient
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './volonteers.html',
   styleUrls: ['./volonteers.css']
 })
 export class VolonteersComponent implements OnInit {
   volonteers: Volonteer[] = [];
-  loading = true;
-  errorMessage = '';
+  loading: boolean = true;        // <- ajouté
+  errorMessage: string = '';       // <- ajoutée
 
-  constructor(private volonteerService: VolonteerService) {}
+  constructor(private volonteerService: AddVolonteerService) {}
 
   ngOnInit(): void {
     this.loadVolonteers();
   }
 
-  loadVolonteers(): void {
-    this.volonteerService.getAllVolonteers().subscribe({
-      next: (data) => {
-        console.log('✅ Données reçues du backend :', data);
+  loadVolonteers() {
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.volonteerService.getVolonteers().subscribe({
+      next: (data: Volonteer[]) => {
         this.volonteers = data;
         this.loading = false;
       },
-      error: (error) => {
-        console.error('❌ Erreur de chargement des volontaires :', error);
+      error: (error: any) => {
+        console.error('Erreur lors du chargement des volontaires :', error);
         this.errorMessage = 'Impossible de charger les volontaires.';
         this.loading = false;
-      },
+      }
     });
   }
 }
