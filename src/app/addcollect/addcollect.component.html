@@ -1,0 +1,105 @@
+<!-- src/app/addcollect/addcollect.component.html -->
+<div class="collect-form-container">
+  <form (ngSubmit)="saveCollect()" class="collect-form">
+    
+    <h2 class="form-title">♻️ Enregistrer une collecte</h2>
+
+    <!-- Messages -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      ✅ {{ successMessage }}
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-error">
+      ⚠️ {{ errorMessage }}
+    </div>
+
+    <!-- Date -->
+    <div class="form-group">
+      <label for="collectDate">📅 Date de la collecte</label>
+      <input
+        type="date"
+        id="collectDate"
+        [(ngModel)]="collectDate"
+        name="collectDate"
+        required
+      />
+    </div>
+
+    <!-- Ville -->
+    <div class="form-group">
+      <label for="cityId">🏙️ Ville</label>
+      <select 
+        id="cityId" 
+        [(ngModel)]="cityId" 
+        name="cityId" 
+        required
+      >
+        <option [ngValue]="null">-- Sélectionnez une ville --</option>
+        <option *ngFor="let city of cities" [ngValue]="city.id">
+          {{ city.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Types de déchets -->
+    <div class="form-group">
+      <label>♻️ Types de déchets (en kg)</label>
+      <div class="waste-types-list">
+        <div *ngFor="let waste of wasteTypes" class="waste-item">
+          <span class="waste-badge" [ngClass]="waste.classname">
+            {{ getEmoji(waste) }}
+          </span>
+          <span class="waste-label">{{ waste.name }}</span>
+          <div class="quantity-controls">
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              [value]="getQuantity(waste.id)"
+              (input)="updateQuantity(waste.id, $any($event.target).value)"
+              [name]="'quantity' + waste.id"
+              class="quantity-input"
+            />
+            <div class="quick-buttons">
+              <button 
+                type="button" 
+                class="quick-btn"
+                (click)="incrementQuantity(waste.id, 1)"
+              >
+                +1
+              </button>
+              <button 
+                type="button" 
+                class="quick-btn"
+                (click)="incrementQuantity(waste.id, 5)"
+              >
+                +5
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Récapitulatif -->
+    <div class="summary" [class.summary-empty]="!hasWasteSelected()">
+      <h3>📊 Récapitulatif</h3>
+      <p><strong>Total collecté:</strong> {{ getTotalWeight() }} kg</p>
+      <p><strong>Types avec quantité:</strong> {{ getSelectedWasteCount() }} / {{ wasteTypes.length }}</p>
+      <p *ngIf="!hasWasteSelected()" class="warning-text">
+        ⚠️ Tous les types de déchets seront enregistrés avec une quantité de 0 kg
+      </p>
+    </div>
+
+    <!-- Boutons -->
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="resetForm()" [disabled]="isSubmitting">
+        🔄 Réinitialiser
+      </button>
+      <button type="submit" class="btn-primary" [disabled]="!isFormValid() || isSubmitting">
+        <span *ngIf="!isSubmitting">✅ Enregistrer la collecte</span>
+        <span *ngIf="isSubmitting">⏳ Enregistrement...</span>
+      </button>
+    </div>
+  </form>
+</div>

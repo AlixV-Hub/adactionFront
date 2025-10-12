@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { AddVolonteerService } from '../services/addvolonteer.service';
 
 @Component({
   selector: 'app-addvolonteer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './addvolonteer.component.html',
   styleUrls: ['./addvolonteer.component.css']
 })

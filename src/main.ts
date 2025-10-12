@@ -1,10 +1,13 @@
-import 'zone.js';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { App } from './app/app';
-import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http'; 
+import { AppComponent } from './app/app';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { routes } from './app/app.routes';
+import 'zone.js';
 
-bootstrapApplication(App, {
-  providers: [importProvidersFrom(HttpClientModule)] 
-})
-.catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideHttpClient(),  // ✅ Fournit HttpClient globalement
+    provideRouter(routes)
+  ]
+}).catch(err => console.error(err));
