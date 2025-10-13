@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AddVolonteerService, Volonteer } from '../../services/addvolonteer.service';
+import { AddVolonteerService, Volonteer } from '../services/addvolonteer.service';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -12,8 +12,8 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class VolonteersComponent implements OnInit {
   volonteers: Volonteer[] = [];
-  loading: boolean = true;      
-  errorMessage: string = '';       
+  loading: boolean = true;
+  errorMessage: string = '';
 
   constructor(private volonteerService: AddVolonteerService) {}
 
