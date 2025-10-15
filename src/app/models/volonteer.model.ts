@@ -6,6 +6,6 @@ export interface Volonteer {
   location: string;
   email: string;
   password?: string;
-  createdAt?: string;
-  updateAt?: string;
+  created_at?: string;
+  update_at?: string;
 }

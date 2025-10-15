@@ -1,15 +1,22 @@
+
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { AddCollectComponent } from './addcollect/addcollect.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddCollectComponent],
-  template: `<app-add-collect></app-add-collect>`,
-  styleUrls: ['./app.css']
+  imports: [RouterOutlet],
+  template: `
+    <router-outlet></router-outlet>
+  `,
+  styles: [`
+    :host {
+      display: block;
+      width: 100%;
+      min-height: 100vh;
+    }
+  `]
 })
-export class AppComponent {
-  title = 'ADACTION';
+export class App {
+  title = 'ALACTION - Gestion des collectes';
 }

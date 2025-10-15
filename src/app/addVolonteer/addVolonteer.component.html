@@ -1,0 +1,111 @@
+
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h2>📝 Inscription Bénévole</h2>
+      <p>Rejoignez nous</p>
+    </div>
+
+
+    @if (successMessage) {
+      <div class="alert alert-success">
+        ✅ {{ successMessage }}
+      </div>
+    }
+
+    @if (errorMessage) {
+      <div class="alert alert-error">
+        ⚠️ {{ errorMessage }}
+      </div>
+    }
+
+    <form [formGroup]="volonteerForm" (ngSubmit)="onSubmit()" class="register-form">
+
+      <div class="form-group">
+        <label for="firstname">👤 Prénom</label>
+        <input
+          type="text"
+          id="firstname"
+          formControlName="firstname"
+          placeholder="Prénom"
+          [disabled]="isSubmitting"
+        />
+        @if (volonteerForm.get('firstname')?.invalid && volonteerForm.get('firstname')?.touched) {
+          <span class="error-text">Le prénom est requis</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="lastname">👤 Nom</label>
+        <input
+          type="text"
+          id="lastname"
+          formControlName="lastname"
+          placeholder="Nom"
+          [disabled]="isSubmitting"
+        />
+        @if (volonteerForm.get('lastname')?.invalid && volonteerForm.get('lastname')?.touched) {
+          <span class="error-text">Le nom est requis</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="location">📍 Localisation</label>
+        <select
+          id="location"
+          formControlName="location"
+          [disabled]="isSubmitting"
+        >
+          <option value="">-- Sélectionnez une ville --</option>
+          <option value="Paris">Paris</option>
+          <option value="Nantes">Nantes</option>
+          <option value="Lyon">Lyon</option>
+          <option value="Besançon">Besançon</option>
+          <option value="Saintes">Saintes</option>
+          <option value="Marseille">Marseille</option>
+          <option value="Bordeaux">Bordeaux</option>
+          <option value="Toulouse">Toulouse</option>
+        </select>
+        @if (volonteerForm.get('location')?.invalid && volonteerForm.get('location')?.touched) {
+          <span class="error-text">La localisation est requise</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="email">📧 Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="email@example.com"
+          [disabled]="isSubmitting"
+        />
+        @if (volonteerForm.get('email')?.invalid && volonteerForm.get('email')?.touched) {
+          <span class="error-text">Email valide requis</span>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="goBack()"
+          [disabled]="isSubmitting"
+        >
+          ← Retour
+        </button>
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="volonteerForm.invalid || isSubmitting"
+        >
+          @if (!isSubmitting) {
+            <span>✅ S'inscrire</span>
+          } @else {
+            <span>⏳ Inscription...</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

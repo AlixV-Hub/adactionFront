@@ -1,10 +1,22 @@
-export interface WasteCollectItem {
-  wasteTypeId: number;
+
+export interface WasteCollectionItem {
+  wasteType: {
+    id: number;
+  };
   quantity: number;
 }
 
-export interface Collect {
+export interface CreateCollectionPayload {
+  collectionDate: string;  // Format: "YYYY-MM-DD"
+  cityId: number;          // Juste l'ID, pas un objet
+  wasteCollectionItems: WasteCollectionItem[];
+}
+
+export interface CollectResponse {
+  id: number;
   collectionDate: string;
   cityId: number;
-  wasteCollectItems: WasteCollectItem[];
+  createdAt: string;
+  updatedAt: string;
+  wasteCollectionItems: WasteCollectionItem[];
 }

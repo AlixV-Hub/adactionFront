@@ -1,8 +1,15 @@
-<h1>{{ title }}</h1>
-
-<nav>
-  <a routerLink="/collect">♻️ Ajouter une collecte</a> |
-  <a routerLink="/volonteer">👥 Ajouter un volontaire</a>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="brand" routerLink="/">♻️ Association</a>
+    <div class="nav-links">
+      <a routerLink="/">Accueil</a>
+      <a routerLink="/add-collect">Créer une collecte</a>
+      <a routerLink="/volonteers">Bénévoles</a>
+      <a routerLink="/volonteer-space">Espace bénévole</a>
+    </div>
+  </div>
 </nav>
 
-<router-outlet></router-outlet>
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

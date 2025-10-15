@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AddVolonteerService, Volonteer } from '../services/addvolonteer.service';
-import { HttpClientModule } from '@angular/common/http';
+import { VolonteerService } from '../services/volonteer.service';
+import {Volonteer} from '../models/volonteer.model';
 
 @Component({
   selector: 'app-volonteers',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule],
   templateUrl: './volonteers.html',
   styleUrls: ['./volonteers.css']
 })
@@ -15,7 +15,7 @@ export class VolonteersComponent implements OnInit {
   loading: boolean = true;
   errorMessage: string = '';
 
-  constructor(private volonteerService: AddVolonteerService) {}
+  constructor(private volonteerService: VolonteerService) {}
 
   ngOnInit(): void {
     this.loadVolonteers();

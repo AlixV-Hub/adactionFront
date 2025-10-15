@@ -1,0 +1,83 @@
+
+<div class="container">
+  <h2>Ajouter une collecte</h2>
+
+  <!-- Msuccès / erreur -->
+  @if (successMessage) {
+    <div class="alert alert-success">{{ successMessage }}</div>
+  }
+  @if (errorMessage) {
+    <div class="alert alert-danger">{{ errorMessage }}</div>
+  }
+
+
+  <form (ngSubmit)="saveCollect()">
+
+    <div class="form-group">
+      <label for="collectionDate">Date de collecte</label>
+      <input
+        type="date"
+        id="collectionDate"
+        [(ngModel)]="collectDate"
+        name="collectionDate"
+        class="form-control"
+        required
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="city">Ville</label>
+      <select
+        id="city"
+        [(ngModel)]="cityId"
+        name="city"
+        class="form-control"
+        required
+      >
+        <option [ngValue]="null">-- Choisir une ville --</option>
+        @for (city of cities; track city.id) {
+          <option [ngValue]="city.id">{{ city.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Types de déchets</label>
+      @for (type of wasteTypes; track type.id) {
+        <div class="waste-item">
+          <span>{{ getEmoji(type) }} {{ type.name }}</span>
+          <button
+            type="button"
+            (click)="incrementQuantity(type.id, -1)"
+            class="btn btn-sm btn-secondary"
+          >
+            -
+          </button>
+          <input
+            type="number"
+            [value]="getQuantity(type.id)"
+            (input)="updateQuantity(type.id, $any($event.target).value)"
+            min="0"
+            class="quantity-input"
+          >
+          <button
+            type="button"
+            (click)="incrementQuantity(type.id, 1)"
+            class="btn btn-sm btn-secondary"
+          >
+            +
+          </button>
+          <span>kg</span>
+        </div>
+      }
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="isSubmitting || !isFormValid() || !hasWasteSelected()"
+      class="btn btn-primary"
+    >
+      {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer la collecte' }}
+    </button>
+  </form>
+</div>

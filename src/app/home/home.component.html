@@ -1,0 +1,26 @@
+
+<div class="home-container">
+  @if (loading) {
+    <p>Chargement des volontaires...</p>
+  }
+
+  @if (!loading) {
+    <div class="stats-section">
+      <p>Nombre de bénévoles inscrits : <strong>{{ totalVolonteers }}</strong></p>
+      <h3>Répartition par localisation :</h3>
+      <ul>
+        @for (location of getUniqueLocations(); track location) {
+          <li>{{ location }} : {{ getLocationCount(location) }} volontaires</li>
+        } @empty {
+          <li>Aucune localisation disponible</li>
+        }
+      </ul>
+    </div>
+
+    <div class="actions">
+      <button (click)="onLogin()">Connexion</button>
+      <button (click)="goToAddVolonteer()">S'inscrire</button>
+      <button (click)="goToVolonteers()">Afficher les volontaires</button>
+    </div>
+  }
+</div>

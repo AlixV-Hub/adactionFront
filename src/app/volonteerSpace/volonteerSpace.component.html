@@ -1,0 +1,168 @@
+
+<div class="volunteer-space-container">
+
+  <div class="space-header">
+    <button class="back-button" (click)="goBack()">
+      ← Retour à l'accueil
+    </button>
+
+    @if (currentVolunteer) {
+      <div class="user-info-card">
+        <div class="user-avatar">
+          {{ getInitials() }}
+        </div>
+        <div class="user-details">
+          <h3 class="user-name">{{ currentVolunteer.firstname }} {{ currentVolunteer.lastname }}</h3>
+          <p class="user-location">📍 {{ currentVolunteer.location }}</p>
+          <p class="user-email">📧 {{ currentVolunteer.email }}</p>
+        </div>
+        <div class="user-actions">
+          <button class="logout-button" (click)="logout()">
+            🚪 Déconnexion
+          </button>
+        </div>
+      </div>
+    }
+
+    <h1 class="space-title">🤝 Mon Espace Bénévole</h1>
+    <p class="space-subtitle">Bienvenue {{ currentVolunteer?.firstname }} !</p>
+  </div>
+
+  <!--  succès/erreur -->
+  @if (successMessage) {
+    <div class="success-banner">
+      ✅ {{ successMessage }}
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-banner">
+      ⚠️ {{ errorMessage }}
+    </div>
+  }
+
+
+  <div class="actions-container">
+
+    <div class="action-card create-collect" (click)="goToCreateCollect()">
+      <div class="action-icon">♻️</div>
+      <div class="action-content">
+        <h2 class="action-title">Créer une collecte</h2>
+        <p class="action-description">
+          Enregistrez une nouvelle collecte de déchets avec les quantités par type
+        </p>
+      </div>
+      <div class="action-arrow">→</div>
+    </div>
+
+    <div class="action-card modify-info" (click)="startEdit()">
+      <div class="action-icon">👤</div>
+      <div class="action-content">
+        <h2 class="action-title">Modifier mon profil</h2>
+        <p class="action-description">
+          Mettez à jour vos informations personnelles et votre localisation
+        </p>
+      </div>
+      <div class="action-arrow">→</div>
+    </div>
+
+  </div>
+
+
+  @if (isEditMode) {
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>✏️ Modifier mon profil</h2>
+          <button class="close-modal-btn" (click)="cancelEdit()">✕</button>
+        </div>
+
+        <form (ngSubmit)="saveProfile()" class="edit-form">
+
+          <div class="form-field">
+            <label for="firstname">👤 Prénom</label>
+            <input
+              type="text"
+              id="firstname"
+              [(ngModel)]="editForm.firstname"
+              name="firstname"
+              class="form-input"
+              required
+              [disabled]="isSaving"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="lastname">👤 Nom</label>
+            <input
+              type="text"
+              id="lastname"
+              [(ngModel)]="editForm.lastname"
+              name="lastname"
+              class="form-input"
+              required
+              [disabled]="isSaving"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="email">📧 Email</label>
+            <input
+              type="email"
+              id="email"
+              [(ngModel)]="editForm.email"
+              name="email"
+              class="form-input"
+              required
+              [disabled]="isSaving"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="location">📍 Ville</label>
+            <select
+              id="location"
+              [(ngModel)]="editForm.location"
+              name="location"
+              class="form-input"
+              required
+              [disabled]="isSaving"
+            >
+              <option value="Paris">Paris</option>
+              <option value="Nantes">Nantes</option>
+              <option value="Lyon">Lyon</option>
+              <option value="Besançon">Besançon</option>
+              <option value="Saintes">Saintes</option>
+              <option value="Marseille">Marseille</option>
+              <option value="Bordeaux">Bordeaux</option>
+              <option value="Toulouse">Toulouse</option>
+            </select>
+          </div>
+
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="btn-cancel"
+              (click)="cancelEdit()"
+              [disabled]="isSaving"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="btn-save"
+              [disabled]="isSaving"
+            >
+              @if (!isSaving) {
+                <span>💾 Enregistrer</span>
+              } @else {
+                <span>⏳ Enregistrement...</span>
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+</div>
