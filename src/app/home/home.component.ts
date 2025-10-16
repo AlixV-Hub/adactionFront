@@ -2,10 +2,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { VolonteerService } from '../services/volonteer.service';
+import { VolunteerService } from '../services/volunteer.service';
 
 
-interface Volonteer {
+interface Volunteer {
   id?: number;
   firstname: string;
   lastname: string;
@@ -22,27 +22,27 @@ interface Volonteer {
 })
 export class HomeComponent implements OnInit {
   loading: boolean = true;
-  volonteers: Volonteer[] = [];
-  totalVolonteers: number = 0;
+  volunteers: Volunteer[] = [];
+  totalVolunteers: number = 0;
 
   constructor(
-    private volonteerService: VolonteerService,
+    private volunteerService: VolunteerService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadVolonteers();
+    this.loadVolunteers();
   }
 
-  loadVolonteers(): void {
+  loadVolunteers(): void {
     this.loading = true;
-    this.volonteerService.getVolonteers().subscribe({
+    this.volunteerService.getVolunteers().subscribe({
       next: (data: any[]) => {
-        this.volonteers = data;
-        this.totalVolonteers = data.length;
+        this.volunteers = data;
+        this.totalVolunteers = data.length;
         this.loading = false;
       },
-      error: (err) => {
+      error: (err : any ) => {
         console.error('Erreur chargement volontaires:', err);
         this.loading = false;
       }
@@ -50,23 +50,23 @@ export class HomeComponent implements OnInit {
   }
 
   getUniqueLocations(): string[] {
-    const locations = this.volonteers.map(v => v.location);
+    const locations = this.volunteers.map(v => v.location);
     return [...new Set(locations)].filter(loc => loc);
   }
 
   getLocationCount(location: string): number {
-    return this.volonteers.filter(v => v.location === location).length;
+    return this.volunteers.filter(v => v.location === location).length;
   }
 
   onLogin(): void {
     this.router.navigate(['/login']);
   }
 
-  goToAddVolonteer(): void {
-    this.router.navigate(['/volonteer']);
+  goToAddVolunteer(): void {
+    this.router.navigate(['/volunteer']);
   }
 
-  goToVolonteers(): void {
-    this.router.navigate(['/volonteers']);
+  goToVolunteers(): void {
+    this.router.navigate(['/volunteers']);
   }
 }

@@ -7,7 +7,7 @@ import 'zone.js';
 
 bootstrapApplication(App, {
   providers: [
-    provideHttpClient(),  //HttpClient globale
+    provideHttpClient(),
     provideRouter(routes)
   ]
 }).catch(err => console.error(err));

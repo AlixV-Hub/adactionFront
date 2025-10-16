@@ -19,7 +19,7 @@
       </div>
     }
 
-    <form [formGroup]="volonteerForm" (ngSubmit)="onSubmit()" class="register-form">
+    <form [formGroup]="volunteerForm" (ngSubmit)="onSubmit()" class="register-form">
 
       <div class="form-group">
         <label for="firstname">👤 Prénom</label>
@@ -30,7 +30,7 @@
           placeholder="Prénom"
           [disabled]="isSubmitting"
         />
-        @if (volonteerForm.get('firstname')?.invalid && volonteerForm.get('firstname')?.touched) {
+        @if (volunteerForm.get('firstname')?.invalid && volunteerForm.get('firstname')?.touched) {
           <span class="error-text">Le prénom est requis</span>
         }
       </div>
@@ -44,7 +44,7 @@
           placeholder="Nom"
           [disabled]="isSubmitting"
         />
-        @if (volonteerForm.get('lastname')?.invalid && volonteerForm.get('lastname')?.touched) {
+        @if (volunteerForm.get('lastname')?.invalid && volunteerForm.get('lastname')?.touched) {
           <span class="error-text">Le nom est requis</span>
         }
       </div>
@@ -66,7 +66,7 @@
           <option value="Bordeaux">Bordeaux</option>
           <option value="Toulouse">Toulouse</option>
         </select>
-        @if (volonteerForm.get('location')?.invalid && volonteerForm.get('location')?.touched) {
+        @if (volunteerForm.get('location')?.invalid && volunteerForm.get('location')?.touched) {
           <span class="error-text">La localisation est requise</span>
         }
       </div>
@@ -80,7 +80,7 @@
           placeholder="email@example.com"
           [disabled]="isSubmitting"
         />
-        @if (volonteerForm.get('email')?.invalid && volonteerForm.get('email')?.touched) {
+        @if (volunteerForm.get('email')?.invalid && volunteerForm.get('email')?.touched) {
           <span class="error-text">Email valide requis</span>
         }
       </div>
@@ -97,7 +97,7 @@
         <button
           type="submit"
           class="btn-primary"
-          [disabled]="volonteerForm.invalid || isSubmitting"
+          [disabled]="volunteerForm.invalid || isSubmitting"
         >
           @if (!isSubmitting) {
             <span>✅ S'inscrire</span>

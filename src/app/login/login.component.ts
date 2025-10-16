@@ -29,36 +29,11 @@ export class LoginComponent {
 
     this.isSubmitting = true;
 
-    // Simulation d'authentification
-    setTimeout(() => {
-      if (this.email && this.password) {
-        // Stocker l'état de connexion
-        sessionStorage.setItem('isLoggedIn', 'true');
-        sessionStorage.setItem('userEmail', this.email);
-
-        // Stocker un utilisateur fictif pour le test
-        const mockUser = {
-          id: 1,
-          firstname: 'Jean',
-          lastname: 'Dupont',
-          email: this.email,
-          location: 'Paris'
-        };
-        sessionStorage.setItem('currentUser', JSON.stringify(mockUser));
-
-        console.log('✅ Connexion réussie - Redirection vers /volonteer-space');
-
-        // Rediriger vers l'espace volontaire
-        this.router.navigate(['/volonteer-space']);
-      } else {
-        this.errorMessage = 'Email ou mot de passe incorrect';
-        this.isSubmitting = false;
-      }
-    }, 500);
+        console.log('✅ Connexion réussie - Redirection vers /volunteer-space');
   }
 
   goToRegister(): void {
-    this.router.navigate(['/volonteer']);
+    this.router.navigate(['/volunteer']);
   }
 
   goBack(): void {

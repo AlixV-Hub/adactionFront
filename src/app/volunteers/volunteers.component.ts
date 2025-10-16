@@ -1,33 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VolonteerService } from '../services/volonteer.service';
-import {Volonteer} from '../models/volonteer.model';
+import { VolunteerService } from '../services/volunteer.service';
+import {Volunteer} from '../models/volunteer.model';
 
 @Component({
-  selector: 'app-volonteers',
+  selector: 'app-volunteers',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './volonteers.html',
-  styleUrls: ['./volonteers.css']
+  templateUrl: './volunteers.html',
+  styleUrls: ['./volunteers.css']
 })
-export class VolonteersComponent implements OnInit {
-  volonteers: Volonteer[] = [];
+export class VolunteersComponent implements OnInit {
+  volunteers: Volunteer[] = [];
   loading: boolean = true;
   errorMessage: string = '';
 
-  constructor(private volonteerService: VolonteerService) {}
+  constructor(private volunteerService: VolunteerService) {}
 
   ngOnInit(): void {
-    this.loadVolonteers();
+    this.loadVolunteers();
   }
 
-  loadVolonteers() {
+  loadVolunteers() {
     this.loading = true;
     this.errorMessage = '';
 
-    this.volonteerService.getVolonteers().subscribe({
-      next: (data: Volonteer[]) => {
-        this.volonteers = data;
+    this.volunteerService.getVolunteers().subscribe({
+      next: (data: Volunteer[]) => {
+        this.volunteers = data;
         this.loading = false;
       },
       error: (error: any) => {

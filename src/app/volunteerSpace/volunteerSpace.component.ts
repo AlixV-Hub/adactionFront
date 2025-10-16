@@ -4,22 +4,22 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { VolonteerService } from '../services/volonteer.service';
-import { Volonteer } from '../models/volonteer.model';
+import { VolunteerService } from '../services/volunteer.service';
+import { Volunteer } from '../models/volunteer.model';
 
 @Component({
-  selector: 'app-volonteer-space',
+  selector: 'app-volunteer-space',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './volonteerSpace.component.html',
-  styleUrls: ['./volonteerSpace.component.css']
+  templateUrl: './volunteerSpace.component.html',
+  styleUrls: ['./volunteerSpace.component.css']
 })
-export class VolonteerSpaceComponent implements OnInit {
-  currentVolunteer: Volonteer | null = null;
+export class VolunteerSpaceComponent implements OnInit {
+  currentVolunteer: Volunteer | null = null;
 
-  // Mode édition
+
   isEditMode: boolean = false;
-  editForm: Partial<Volonteer> = {};
+  editForm: Partial<Volunteer> = {};
   isSaving: boolean = false;
   successMessage: string = '';
   errorMessage: string = '';
@@ -27,11 +27,11 @@ export class VolonteerSpaceComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private volonteerService: VolonteerService
+    private volunteerService: VolunteerService
   ) {}
 
   ngOnInit(): void {
-    // Vérifier si l'utilisateur est connecté
+
     this.currentVolunteer = this.authService.getCurrentVolunteer();
 
     if (!this.currentVolunteer) {
@@ -43,7 +43,7 @@ export class VolonteerSpaceComponent implements OnInit {
     console.log('✅ Volontaire connecté:', this.currentVolunteer);
   }
 
-  // Navigation vers la page de création de collecte
+
   goToCreateCollect(): void {
     this.router.navigate(['/collect']);
   }
@@ -57,7 +57,7 @@ export class VolonteerSpaceComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  // Édition du profil
+
   startEdit(): void {
     this.isEditMode = true;
     this.editForm = {
@@ -87,8 +87,8 @@ export class VolonteerSpaceComponent implements OnInit {
     this.successMessage = '';
     this.errorMessage = '';
 
-    // Préparer les données à envoyer
-    const updatedData: Volonteer = {
+
+    const updatedData: Volunteer = {
       id: this.currentVolunteer.id,
       firstname: this.editForm.firstname || this.currentVolunteer.firstname,
       lastname: this.editForm.lastname || this.currentVolunteer.lastname,
@@ -96,8 +96,8 @@ export class VolonteerSpaceComponent implements OnInit {
       location: this.editForm.location || this.currentVolunteer.location
     };
 
-    this.volonteerService.updateVolonteer(this.currentVolunteer.id, updatedData).subscribe({
-      next: (updated: Volonteer) => {
+    this.volunteerService.updateVolunteer(this.currentVolunteer.id, updatedData).subscribe({
+      next: (updated: Volunteer) => {
         console.log('✅ Profil mis à jour:', updated);
         this.currentVolunteer = updated;
         this.authService.setCurrentVolunteer(updated);
@@ -117,7 +117,7 @@ export class VolonteerSpaceComponent implements OnInit {
     });
   }
 
-  // Utilitaires
+
   getInitials(): string {
     if (!this.currentVolunteer) return '?';
     const first = this.currentVolunteer.firstname?.charAt(0) || '';

@@ -6,7 +6,7 @@
 
   @if (!loading) {
     <div class="stats-section">
-      <p>Nombre de bénévoles inscrits : <strong>{{ totalVolonteers }}</strong></p>
+      <p>Nombre de bénévoles inscrits : <strong>{{ totalVolunteers }}</strong></p>
       <h3>Répartition par localisation :</h3>
       <ul>
         @for (location of getUniqueLocations(); track location) {
@@ -19,8 +19,8 @@
 
     <div class="actions">
       <button (click)="onLogin()">Connexion</button>
-      <button (click)="goToAddVolonteer()">S'inscrire</button>
-      <button (click)="goToVolonteers()">Afficher les volontaires</button>
+      <button (click)="goToAddVolunteer()">S'inscrire</button>
+      <button (click)="goToVolunteers()">Afficher les volontaires</button>
     </div>
   }
 </div>

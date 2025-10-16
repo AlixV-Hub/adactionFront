@@ -6,8 +6,8 @@
   {{ errorMessage }}
 </section>
 
-<ul *ngIf="!loading && !errorMessage" class="volonteer-list">
-  <li *ngFor="let v of volonteers">
+<ul *ngIf="!loading && !errorMessage" class="volunteer-list">
+  <li *ngFor="let v of volunteers">
     {{ v.firstname }} {{ v.lastname }} - {{ v.location }} - {{ v.email }}
   </li>
 </ul>
