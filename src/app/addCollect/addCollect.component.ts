@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +19,6 @@ export class AddCollectComponent implements OnInit {
   collectDate: string = '';
   cityId: number | null = null;
   cities: City[] = [];
-
 
   isSubmitting: boolean = false;
   successMessage: string = '';
@@ -123,7 +121,6 @@ export class AddCollectComponent implements OnInit {
     return Object.values(this.quantities).reduce((sum, qty) => sum + qty, 0);
   }
 
-
   saveCollect(): void {
     this.successMessage = '';
     this.errorMessage = '';
@@ -141,15 +138,16 @@ export class AddCollectComponent implements OnInit {
     this.isSubmitting = true;
 
     const wasteItems = this.wasteTypes
-      .filter(t => this.getQuantity(t.id) > 0) // Envoyer seulement les quantités > 0
+      .filter(t => this.getQuantity(t.id) > 0)
       .map(t => ({
         wasteType: { id: t.id },
         quantity: this.getQuantity(t.id)
       }));
 
+    // ✅ Payload corrigé pour correspondre au backend
     const payload = {
-      collectionDate: this.collectDate,
-      cityId: this.cityId,  // ✅ Juste l'ID, pas un objet
+      collectionDate: this.collectDate + 'T00:00:00',  // ✅ Convertir en LocalDateTime
+      city: { id: this.cityId },  // ✅ Objet au lieu de cityId
       wasteCollectionItems: wasteItems
     };
 
@@ -167,9 +165,10 @@ export class AddCollectComponent implements OnInit {
         console.error('❌ Erreur enregistrement:', err);
         console.error('📋 Détails erreur:', err.error);
 
-        // Afficher le message d'erreur du backend si disponible
         if (err.error && err.error.message) {
           this.errorMessage = `Erreur: ${err.error.message}`;
+        } else if (err.message) {
+          this.errorMessage = `Erreur: ${err.message}`;
         } else {
           this.errorMessage = 'Erreur lors de l\'enregistrement. Vérifiez la console pour plus de détails.';
         }

@@ -8,7 +8,7 @@ import { Volunteer } from '../models/volunteer.model';
   providedIn: 'root'
 })
 export class VolunteerService {
-  private apiUrl = 'http://localhost:8080/api/volonteers';
+  private apiUrl = 'http://localhost:8080/api/volunteers';
 
   constructor(private http: HttpClient) {}
 

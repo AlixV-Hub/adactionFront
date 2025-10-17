@@ -1,17 +1,8 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { VolunteerService } from '../services/volunteer.service';
-
-
-interface Volunteer {
-  id?: number;
-  firstname: string;
-  lastname: string;
-  location: string;
-  email: string;
-}
+import { Volunteer } from '../models/volunteer.model';
 
 @Component({
   selector: 'app-home',
@@ -37,21 +28,26 @@ export class HomeComponent implements OnInit {
   loadVolunteers(): void {
     this.loading = true;
     this.volunteerService.getVolunteers().subscribe({
-      next: (data: any[]) => {
+      next: (data: Volunteer[]) => {
         this.volunteers = data;
         this.totalVolunteers = data.length;
         this.loading = false;
+        console.log(`✅ ${this.totalVolunteers} volontaire(s) chargé(s)`);
       },
-      error: (err : any ) => {
-        console.error('Erreur chargement volontaires:', err);
+      error: (err: Error) => {
+        console.error('❌ Erreur chargement volontaires:', err);
+        this.volunteers = [];
+        this.totalVolunteers = 0;
         this.loading = false;
       }
     });
   }
 
   getUniqueLocations(): string[] {
-    const locations = this.volunteers.map(v => v.location);
-    return [...new Set(locations)].filter(loc => loc);
+    const locations = this.volunteers
+      .map(v => v.location)
+      .filter(loc => loc && loc.trim() !== '');
+    return [...new Set(locations)];
   }
 
   getLocationCount(location: string): number {

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { Volunteer } from '../models/volunteer.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/volunteers';
+  private apiUrl = 'http://localhost:8080/api';
   private currentVolunteerSubject = new BehaviorSubject<Volunteer | null>(null);
   public currentVolunteer$ = this.currentVolunteerSubject.asObservable();
 
@@ -17,19 +17,24 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<Volunteer | null> {
-    return this.http.get<Volunteer[]>(this.apiUrl).pipe(
-      map((volunteers: Volunteer[]) => {
-        const volunteer = volunteers.find(
-          (v: Volunteer) =>
-            v.email.toLowerCase() === email.toLowerCase() &&
-            v.password === password
-        );
+    this.logout();
 
-        if (volunteer) {
-          this.setCurrentVolunteer(volunteer);
+    console.log('📤 Envoi de la requête de login pour:', email);
+
+    return this.http.post<Volunteer>(`${this.apiUrl}/auth/login`, { email, password }).pipe(
+      map((volunteer: Volunteer) => {
+        console.log('✅ Connexion réussie:', volunteer.firstname, volunteer.lastname);
+        this.setCurrentVolunteer(volunteer);
+        return volunteer;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log('❌ Échec de connexion:', error.status);
+        if (error.status === 401) {
+          console.log('⚠️ Identifiants incorrects');
+        } else {
+          console.error('⚠️ Erreur serveur:', error.message);
         }
-
-        return volunteer ?? null;
+        return of(null);
       })
     );
   }
@@ -37,7 +42,7 @@ export class AuthService {
   setCurrentVolunteer(volunteer: Volunteer): void {
     this.currentVolunteerSubject.next(volunteer);
     localStorage.setItem('currentVolunteer', JSON.stringify(volunteer));
-    console.log('✅ Volontaire connecté:', volunteer);
+    console.log('💾 Session enregistrée pour:', volunteer.firstname, volunteer.lastname);
   }
 
   getCurrentVolunteer(): Volunteer | null {
@@ -50,20 +55,23 @@ export class AuthService {
       try {
         const volunteer: Volunteer = JSON.parse(stored);
         this.currentVolunteerSubject.next(volunteer);
-        console.log('✅ Session restaurée:', volunteer);
+        console.log('🔄 Session restaurée:', volunteer.firstname, volunteer.lastname);
       } catch (e) {
-        console.error('Erreur de parsing du localStorage');
+        console.error('❌ Erreur de parsing du localStorage');
+        localStorage.removeItem('currentVolunteer');
       }
     }
   }
 
   logout(): void {
+    const currentUser = this.currentVolunteerSubject.value;
+    if (currentUser) {
+      console.log('👋 Déconnexion de:', currentUser.firstname, currentUser.lastname);
+    }
     this.currentVolunteerSubject.next(null);
     localStorage.removeItem('currentVolunteer');
-    console.log('👋 Déconnexion');
   }
 
-  // Vérifier si connecté
   isAuthenticated(): boolean {
     return this.currentVolunteerSubject.value !== null;
   }

@@ -1,8 +1,8 @@
-
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,10 @@ export class LoginComponent {
   errorMessage: string = '';
   isSubmitting: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   onSubmit(): void {
     this.errorMessage = '';
@@ -29,7 +32,24 @@ export class LoginComponent {
 
     this.isSubmitting = true;
 
-        console.log('✅ Connexion réussie - Redirection vers /volunteer-space');
+    // Appel au service d'authentification
+    this.authService.login(this.email, this.password).subscribe({
+      next: (volunteer) => {
+        this.isSubmitting = false;
+
+        if (volunteer) {
+          console.log('✅ Connexion réussie - Redirection vers /volunteer-space');
+          this.router.navigate(['/volunteer-space']);
+        } else {
+          this.errorMessage = 'Email ou mot de passe incorrect';
+        }
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        console.error('❌ Erreur de connexion:', error);
+        this.errorMessage = 'Erreur de connexion au serveur';
+      }
+    });
   }
 
   goToRegister(): void {
