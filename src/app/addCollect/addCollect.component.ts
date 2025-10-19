@@ -4,174 +4,187 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CollectService, City } from '../services/collect.service';
 import { WasteType } from '../models/waste.model';
+import { SecondaryNavComponent } from '../shared/secondary-nav/secondary-nav';
+
+interface WasteItem {
+  wasteTypeId: number;
+  quantity: number;
+}
 
 @Component({
   selector: 'app-add-collect',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SecondaryNavComponent],
   templateUrl: './addCollect.component.html',
   styleUrls: ['./addCollect.component.css']
 })
 export class AddCollectComponent implements OnInit {
-
-  wasteTypes: WasteType[] = [];
-  quantities: { [key: number]: number } = {};
   collectDate: string = '';
-  cityId: number | null = null;
+  cityName: string = '';  // ✅ Utiliser le nom au lieu de l'ID
   cities: City[] = [];
+  wasteTypes: WasteType[] = [];
+  wasteItems: Map<number, number> = new Map();
 
-  isSubmitting: boolean = false;
+  // Mapping des noms de villes vers les IDs de la BDD (colonne id)
+  cityIdMap: { [key: string]: number } = {
+    'Paris': 1,        // id = 1
+    'Marseille': 2,    // id = 2
+    'Lyon': 3,         // id = 3
+    'Toulouse': 4,     // id = 4
+    'Nice': 5,         // id = 5
+    'Nantes': 6,       // id = 6
+    'Strasbourg': 7,   // id = 7
+    'Montpellier': 8,  // id = 8
+    'Bordeaux': 9,     // id = 9
+    'Lille': 10,       // id = 10
+    'Besançon': 11,    // id = 11
+    'Besancon': 11,    // Version sans accent
+    'Saintes': 12      // id = 12
+  };
+
   successMessage: string = '';
   errorMessage: string = '';
+  isSubmitting: boolean = false;
 
   constructor(
-    private collectService: CollectService,
-    private router: Router
-  ) {
+    private router: Router,
+    private collectService: CollectService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadCities();
+    this.loadWasteTypes();
+
+    // Définir la date du jour par défaut
     const today = new Date();
     this.collectDate = today.toISOString().split('T')[0];
   }
 
-  ngOnInit(): void {
-    this.loadWasteTypes();
-    this.loadCities();
+  loadCities(): void {
+    this.collectService.getCities().subscribe({
+      next: (data) => {
+        this.cities = data;
+        console.log('✅ Villes chargées:', this.cities);
+      },
+      error: (error) => {
+        console.error('❌ Erreur lors du chargement des villes:', error);
+        this.errorMessage = 'Impossible de charger les villes';
+      }
+    });
   }
 
   loadWasteTypes(): void {
     this.collectService.getAllWasteTypes().subscribe({
-      next: (types: WasteType[]) => {
-        this.wasteTypes = types;
-        types.forEach(t => this.quantities[t.id] = 0);
-        console.log('✅ Types de déchets chargés:', types);
+      next: (data) => {
+        this.wasteTypes = data;
+        console.log('✅ Types de déchets chargés:', this.wasteTypes);
+
+        // Initialiser les quantités à 0
+        this.wasteTypes.forEach(type => {
+          this.wasteItems.set(type.id, 0);
+        });
       },
-      error: err => {
-        console.error('❌ Erreur chargement types de déchets', err);
-        this.loadDefaultWasteTypes();
+      error: (error) => {
+        console.error('❌ Erreur lors du chargement des types de déchets:', error);
+        this.errorMessage = 'Impossible de charger les types de déchets';
       }
     });
   }
 
-  loadDefaultWasteTypes(): void {
-    this.wasteTypes = [
-      { id: 1, value: 'cigarette', name: 'Mégots', label: 'Cigarette', classname: 'badge-cigarette' },
-      { id: 2, value: 'plastic', name: 'Plastique', label: 'Plastique', classname: 'badge-plastic' },
-      { id: 3, value: 'glass', name: 'Verre', label: 'Verre', classname: 'badge-glass' },
-      { id: 4, value: 'metal', name: 'Métal', label: 'Métal', classname: 'badge-metal' },
-      { id: 5, value: 'electronic', name: 'Électronique', label: 'Électronique', classname: 'badge-electronic' },
-      { id: 6, value: 'other', name: 'Autre', label: 'Autre', classname: 'badge-other' }
-    ];
-    this.wasteTypes.forEach(t => this.quantities[t.id] = 0);
+  getQuantity(wasteTypeId: number): number {
+    return this.wasteItems.get(wasteTypeId) || 0;
   }
 
-  loadCities(): void {
-    this.collectService.getCities().subscribe({
-      next: (data: City[]) => {
-        this.cities = data;
-        console.log('✅ Villes chargées:', data);
-      },
-      error: err => {
-        console.error('❌ Erreur chargement villes', err);
-        this.cities = [
-          { id: 1, name: 'Paris' },
-          { id: 2, name: 'Nantes' },
-          { id: 3, name: 'Lyon' },
-          { id: 4, name: 'Besançon' },
-          { id: 5, name: 'Saintes' }
-        ];
-      }
-    });
+  updateQuantity(wasteTypeId: number, value: string): void {
+    const quantity = parseInt(value) || 0;
+    this.wasteItems.set(wasteTypeId, Math.max(0, quantity));
   }
 
-  getQuantity(id: number): number {
-    return this.quantities[id] || 0;
+  incrementQuantity(wasteTypeId: number, delta: number): void {
+    const currentQuantity = this.getQuantity(wasteTypeId);
+    const newQuantity = Math.max(0, currentQuantity + delta);
+    this.wasteItems.set(wasteTypeId, newQuantity);
   }
 
-  updateQuantity(id: number, value: any): void {
-    const numValue = Number(value);
-    this.quantities[id] = numValue >= 0 ? numValue : 0;
-  }
-
-  incrementQuantity(id: number, amount: number): void {
-    const current = this.getQuantity(id);
-    this.quantities[id] = Math.max(0, current + amount);
-  }
-
-  getEmoji(wasteType: WasteType): string {
-    const value = (wasteType.value || '').toLowerCase();
-    const name = (wasteType.name || '').toLowerCase();
-
-    if (value.includes('cigarette') || name.includes('mégot')) return '🚬';
-    if (value.includes('plastic') || name.includes('plastique')) return '♻️';
-    if (value.includes('glass') || name.includes('verre')) return '🍾';
-    if (value.includes('metal') || name.includes('métal')) return '🔩';
-    if (value.includes('electronic') || name.includes('électronique')) return '💻';
-    if (value.includes('other') || name.includes('autre')) return '🗑️';
-    return '📦';
+  getEmoji(type: WasteType): string {
+    const emojiMap: { [key: string]: string } = {
+      'Plastique': '🔵',
+      'Verre': '🟢',
+      'Métal': '⚙️',
+      'Papier': '📄',
+      'Organique': '🍂',
+      'Électronique': '🔌',
+      'Autre': '🗑️'
+    };
+    return emojiMap[type.label] || '📦';
   }
 
   isFormValid(): boolean {
-    return !!(this.collectDate && this.cityId);
+    return !!(this.collectDate && this.cityName);
   }
 
   hasWasteSelected(): boolean {
-    return Object.values(this.quantities).some(qty => qty > 0);
-  }
-
-  getTotalWeight(): number {
-    return Object.values(this.quantities).reduce((sum, qty) => sum + qty, 0);
+    return Array.from(this.wasteItems.values()).some(quantity => quantity > 0);
   }
 
   saveCollect(): void {
-    this.successMessage = '';
-    this.errorMessage = '';
-
-    if (!this.collectDate || !this.cityId) {
-      this.errorMessage = 'Veuillez remplir la date et la ville.';
+    if (!this.isFormValid() || !this.hasWasteSelected()) {
+      this.errorMessage = 'Veuillez remplir tous les champs et sélectionner au moins un type de déchet';
+      setTimeout(() => this.errorMessage = '', 3000);
       return;
     }
 
-    if (!this.hasWasteSelected()) {
-      this.errorMessage = 'Veuillez saisir au moins une quantité de déchet.';
+    // ✅ Convertir le nom de ville en ID
+    const cityId = this.cityIdMap[this.cityName];
+
+    if (!cityId) {
+      this.errorMessage = `Ville "${this.cityName}" non trouvée dans la base de données`;
+      console.error('❌ Ville non trouvée:', this.cityName);
+      console.log('🗺️ Mapping disponible:', this.cityIdMap);
       return;
     }
+
+    // Debug logs
+    console.log('🔍 Ville sélectionnée:', this.cityName);
+    console.log('🔍 ID correspondant dans la BDD:', cityId);
 
     this.isSubmitting = true;
+    this.errorMessage = '';
+    this.successMessage = '';
 
-    const wasteItems = this.wasteTypes
-      .filter(t => this.getQuantity(t.id) > 0)
-      .map(t => ({
-        wasteType: { id: t.id },
-        quantity: this.getQuantity(t.id)
-      }));
+    // Préparer les items
+    const items: WasteItem[] = [];
+    this.wasteItems.forEach((quantity, wasteTypeId) => {
+      if (quantity > 0) {
+        items.push({ wasteTypeId, quantity });
+      }
+    });
 
-    // ✅ Payload corrigé pour correspondre au backend
-    const payload = {
-      collectionDate: this.collectDate + 'T00:00:00',  // ✅ Convertir en LocalDateTime
-      city: { id: this.cityId },  // ✅ Objet au lieu de cityId
-      wasteCollectionItems: wasteItems
+    const collectData = {
+      collectionDate: this.collectDate,
+      cityId: cityId,  // ✅ Utiliser l'ID réel de la BDD
+      items: items
     };
 
-    console.log('📤 Envoi du payload:', JSON.stringify(payload, null, 2));
+    console.log('📤 Envoi des données:', collectData);
 
-    this.collectService.createCollect(payload).subscribe({
-      next: res => {
-        console.log('✅ Collecte enregistrée:', res);
-        const total = this.getTotalWeight();
-        this.successMessage = `Collecte enregistrée avec succès ! Total: ${total.toFixed(1)} kg`;
-        this.isSubmitting = false;
-        setTimeout(() => this.resetForm(), 2000);
+    this.collectService.createCollect(collectData).subscribe({
+      next: (response) => {
+        console.log('✅ Collecte créée avec succès:', response);
+        this.successMessage = `Collecte enregistrée avec succès pour ${this.cityName} !`;
+
+        // Réinitialiser le formulaire
+        setTimeout(() => {
+          this.resetForm();
+          this.successMessage = '';
+        }, 2000);
       },
-      error: err => {
-        console.error('❌ Erreur enregistrement:', err);
-        console.error('📋 Détails erreur:', err.error);
-
-        if (err.error && err.error.message) {
-          this.errorMessage = `Erreur: ${err.error.message}`;
-        } else if (err.message) {
-          this.errorMessage = `Erreur: ${err.message}`;
-        } else {
-          this.errorMessage = 'Erreur lors de l\'enregistrement. Vérifiez la console pour plus de détails.';
-        }
+      error: (error) => {
+        console.error('❌ Erreur lors de la création de la collecte:', error);
+        this.errorMessage = 'Erreur lors de l\'enregistrement de la collecte';
+        this.isSubmitting = false;
+      },
+      complete: () => {
         this.isSubmitting = false;
       }
     });
@@ -180,10 +193,15 @@ export class AddCollectComponent implements OnInit {
   resetForm(): void {
     const today = new Date();
     this.collectDate = today.toISOString().split('T')[0];
-    this.cityId = null;
-    Object.keys(this.quantities).forEach(k => this.quantities[+k] = 0);
-    this.isSubmitting = false;
-    this.successMessage = '';
-    this.errorMessage = '';
+    this.cityName = '';
+
+    // Réinitialiser toutes les quantités à 0
+    this.wasteItems.forEach((_, key) => {
+      this.wasteItems.set(key, 0);
+    });
+  }
+
+  goBack(): void {
+    this.router.navigate(['/volunteer-space']);
   }
 }

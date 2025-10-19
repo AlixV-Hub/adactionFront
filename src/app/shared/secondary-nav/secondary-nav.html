@@ -1,0 +1,50 @@
+<nav class="secondary-nav">
+  <div class="secondary-nav-inner">
+    <!-- Titre/Logo -->
+    <span class="brand">♻️ {{ title }}</span>
+
+    <!-- Actions de navigation -->
+    <div class="nav-actions">
+      <!-- Bouton actualiser optionnel -->
+      <button
+        *ngIf="showRefresh"
+        (click)="refresh()"
+        type="button"
+        class="refresh-btn"
+        aria-label="Actualiser les données"
+      >
+        🔄 Actualiser
+      </button>
+
+      <!-- Bouton retour optionnel -->
+      <button
+        *ngIf="showBackButton"
+        (click)="goBack()"
+        type="button"
+        aria-label="Retour"
+      >
+        ← {{ backLabel }}
+      </button>
+
+      <!-- Bouton accueil -->
+      <button
+        (click)="goToHome()"
+        type="button"
+        aria-label="Retour à l'accueil"
+      >
+        🏠 Accueil
+      </button>
+
+      <!-- Bouton déconnexion optionnel -->
+      <button
+        *ngIf="showLogout"
+        (click)="logout()"
+        type="button"
+        class="logout-btn"
+        aria-label="Se déconnecter"
+      >
+        🚪 Déconnexion
+      </button>
+    </div>
+  </div>
+</nav>

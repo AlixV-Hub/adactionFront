@@ -27,7 +27,7 @@ export class CollectService {
     console.log('📤 Envoi du payload:', JSON.stringify(payload, null, 2));
 
     return from(
-      fetch(`${this.apiUrl}/collections`, {  // ✅ /collections
+      fetch(`${this.apiUrl}/collections`, {  // ✅ Changé: /collects → /collections
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -42,9 +42,11 @@ export class CollectService {
     );
   }
 
+  // ✅ Récupère les villes depuis les volontaires
   getCities(): Observable<City[]> {
     return this.http.get<Volunteer[]>(`${this.apiUrl}/volunteers`).pipe(
       map((volunteers: Volunteer[]) => {
+        // Extraire les villes uniques
         const uniqueLocations = new Set<string>();
         volunteers.forEach(v => {
           if (v.location && v.location.trim() !== '') {
@@ -52,8 +54,9 @@ export class CollectService {
           }
         });
 
+        // Convertir en tableau de City avec ID et name
         const cities: City[] = Array.from(uniqueLocations)
-          .sort()
+          .sort() // Ordre alphabétique
           .map((name, index) => ({
             id: index + 1,
             name: name
@@ -63,5 +66,15 @@ export class CollectService {
         return cities;
       })
     );
+  }
+
+  // ✅ Récupérer toutes les collectes
+  getAllCollections(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/collections`);
+  }
+
+  // ✅ Supprimer une collecte
+  deleteCollection(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/collections/${id}`);
   }
 }

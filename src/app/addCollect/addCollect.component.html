@@ -1,5 +1,23 @@
+<app-secondary-nav
+  title="Al'Action"
+  [showBackButton]="false"
+  [showLogout]="false"
+  [showRefresh]="true">
+</app-secondary-nav>
+
+<div class="home-container">
+  <div class="hero">
+    <h1>BIENVENU.E.S SUR AL'ACTION</h1>
+    <p class="subtitle">Al'action est une association qui sensibilise aux ramassages des déchets sauvages</p>
+  </div>
+</div>
 
 <div class="container">
+  <!-- Bouton retour -->
+  <button class="btn btn-back" (click)="goBack()">
+    ← Retour
+  </button>
+
   <h2>Ajouter une collecte</h2>
 
   @if (successMessage) {
@@ -8,7 +26,6 @@
   @if (errorMessage) {
     <div class="alert alert-danger">{{ errorMessage }}</div>
   }
-
 
   <form (ngSubmit)="saveCollect()">
 
@@ -28,7 +45,7 @@
       <label for="city">Ville</label>
       <select
         id="city"
-        [(ngModel)]="cityId"
+        [(ngModel)]="cityName"
         name="city"
         class="form-control"
         required

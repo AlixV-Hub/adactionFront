@@ -6,15 +6,21 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { VolunteerService } from '../services/volunteer.service';
 import { Volunteer } from '../models/volunteer.model';
+import {SecondaryNavComponent} from '../shared/secondary-nav/secondary-nav';
 
 @Component({
   selector: 'app-volunteer-space',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SecondaryNavComponent],
   templateUrl: './volunteerSpace.component.html',
   styleUrls: ['./volunteerSpace.component.css']
 })
 export class VolunteerSpaceComponent implements OnInit {
+  isOnMySpace: any;
+  loadData: any;
+  goToMySpace() {
+      throw new Error("Method not implemented.");
+  }
   currentVolunteer: Volunteer | null = null;
 
 

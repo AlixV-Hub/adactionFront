@@ -1,3 +1,18 @@
+<app-secondary-nav
+  title="Al'Action"
+  [showBackButton]="false"
+  [showLogout]="false"
+  [showRefresh]="true">
+</app-secondary-nav>
+
+<div class="home-container">
+  <div class="hero">
+    <h1>BIENVENU.E.S SUR AL'ACTION</h1>
+    <p class="subtitle">Al'action est une association qui sensibilise aux ramassages des déchets sauvages</p>
+    <!-- Vous pouvez retirer le bouton actualiser d'ici maintenant -->
+  </div>
+</div>
+
 <section *ngIf="loading" class="loading">
   Chargement des volontaires...
 </section>

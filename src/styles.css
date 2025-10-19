@@ -1,0 +1,611 @@
+@import "tailwindcss";
+
+/* =================================
+   THÈME PERSONNALISÉ - Palette Pink/Green/Wine/Red
+   ================================= */
+@theme {
+  /* Couleurs principales */
+  --color-primary-green: #105419;
+  --color-primary-pink: #FAA49A;
+  --color-primary-wine: #3B0A0A;
+  --color-primary-red: #C4391D;
+
+  --color-green-dark: #0a3510;
+  --color-green-light: #dcfce7;
+  --color-pink-light: #fee2e2;
+  --color-wine-dark: #2d0808;
+  --color-red-dark: #991b1b;
+
+  /* Espacements personnalisés */
+  --spacing-section: 2rem;
+}
+
+/* =================================
+   BASE STYLES - Mobile First
+   ================================= */
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  body {
+    @apply m-0 p-0 font-sans text-gray-900 bg-gray-50 antialiased;
+  }
+
+  /* Focus accessibilité RGAA */
+  *:focus-visible {
+    @apply outline-none ring-4 ring-[var(--color-primary-green)] ring-offset-2;
+  }
+
+  /* Typographie */
+  h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl font-semibold text-gray-900 mb-2;
+  }
+
+  p {
+    @apply text-gray-600 leading-relaxed mb-4;
+  }
+
+  /* Liens */
+  a {
+    @apply text-[var(--color-primary-green)] underline transition-colors hover:text-[var(--color-green-dark)];
+  }
+}
+
+/* =================================
+   COMPOSANTS PERSONNALISÉS
+   ================================= */
+@layer components {
+
+  /* NAVIGATION */
+  .navbar,
+  nav {
+    @apply bg-white border-b-2 border-gray-200 p-4 shadow-sm;
+  }
+
+  .nav-inner {
+    @apply max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4;
+  }
+
+  .brand {
+    @apply text-xl font-bold text-[var(--color-primary-green)] no-underline;
+  }
+
+  .nav-links {
+    @apply flex flex-wrap gap-2 justify-center;
+  }
+
+  .nav-links a {
+    @apply px-4 py-2 text-gray-600 no-underline font-medium rounded-lg
+    transition-all min-h-[44px] inline-flex items-center
+    hover:text-[var(--color-primary-green)] hover:bg-[var(--color-green-light)];
+  }
+
+  /* Navbar secondaire pour espaces bénévoles */
+  .secondary-nav {
+    @apply bg-gradient-to-r from-[var(--color-primary-green)] to-[var(--color-green-dark)]
+    border-b border-white/20 px-4 py-3 shadow-md
+    sticky top-0 z-50;
+  }
+
+  .secondary-nav-inner {
+    @apply max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3;
+  }
+
+  .secondary-nav .brand {
+    @apply text-white font-semibold text-base md:text-lg;
+  }
+
+  .secondary-nav .nav-actions {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .secondary-nav button,
+  .secondary-nav a {
+    @apply px-3 py-2 text-xs md:text-sm font-medium rounded-lg
+    bg-white/20 text-white border-2 border-white/40
+    backdrop-blur-sm transition-all min-h-[40px]
+    hover:bg-white hover:text-[var(--color-primary-green)] hover:border-white hover:scale-105
+    inline-flex items-center gap-2;
+  }
+
+  /* HEADER / HERO */
+  .header,
+  .space-header,
+  .hero {
+    @apply bg-gradient-to-br from-[var(--color-primary-green)] to-[var(--color-green-dark)]
+    text-white p-6 md:p-8 lg:p-12 rounded-2xl mb-8 shadow-xl text-center;
+  }
+
+  .header h1,
+  .header h2,
+  .space-header h1,
+  .hero h1 {
+    @apply text-white mb-2;
+  }
+
+  .subtitle,
+  .space-subtitle,
+  .hero p {
+    @apply text-[var(--color-green-light)] text-base md:text-lg m-0 opacity-95;
+  }
+
+  /* CONTENEURS */
+  .container,
+  .home-container,
+  .login-container,
+  .register-container,
+  .volunteer-space-container {
+    @apply w-full max-w-7xl mx-auto px-4 py-8 md:px-6 lg:px-8;
+  }
+
+  /* FORMULAIRES */
+  label,
+  .form-group label,
+  .form-field label {
+    @apply block mb-2 font-semibold text-sm text-gray-900;
+  }
+
+  input[type='text'],
+  input[type='date'],
+  input[type='email'],
+  input[type='password'],
+  input[type='number'],
+  select,
+  textarea,
+  .form-control,
+  .form-input {
+    @apply w-full px-4 py-3 text-base text-gray-900 bg-white
+    border-2 border-gray-300 rounded-lg
+    transition-all duration-200
+    focus:border-[var(--color-primary-green)] focus:ring-4 focus:ring-[var(--color-green-light)]/30
+    disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-gray-400;
+  }
+
+  .quantity-input {
+    @apply w-20 text-center font-semibold;
+  }
+
+  .form-group,
+  .form-field {
+    @apply mb-6;
+  }
+
+  .error-text {
+    @apply block mt-2 text-sm text-red-700 font-medium;
+  }
+
+  /* BOUTONS - Mobile First */
+  button,
+  .btn,
+  input[type="submit"],
+  input[type="button"] {
+    @apply inline-flex items-center justify-center gap-2
+    px-6 py-3 text-base font-semibold
+    border-2 border-transparent rounded-lg
+    cursor-pointer transition-all duration-200
+    min-h-[44px] min-w-[44px]
+    bg-gradient-to-br from-[var(--color-primary-green)] to-[var(--color-green-dark)]
+    text-white shadow-md
+    hover:shadow-lg hover:-translate-y-0.5
+    active:translate-y-0
+    disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:shadow-none;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-br from-[var(--color-primary-green)] to-[var(--color-green-dark)]
+    text-white border-[var(--color-primary-green)];
+  }
+
+  .btn-secondary {
+    @apply bg-gradient-to-br from-[var(--color-primary-green)] to-[var(--color-green-dark)]
+    text-white border-[var(--color-primary-green)] shadow-md
+    hover:shadow-lg;
+  }
+
+  .btn-success {
+    @apply bg-gradient-to-br from-[var(--color-primary-green)] to-[var(--color-green-dark)]
+    text-white border-[var(--color-primary-green)];
+  }
+
+  .btn-danger {
+    @apply bg-gradient-to-br from-[var(--color-primary-red)] to-[var(--color-red-dark)]
+    text-white border-[var(--color-primary-red)];
+  }
+
+  .btn-info {
+    @apply bg-gradient-to-br from-[var(--color-primary-pink)] to-[var(--color-primary-wine)]
+    text-white border-[var(--color-primary-pink)];
+  }
+
+  .btn-warning {
+    @apply bg-gradient-to-br from-[var(--color-primary-wine)] to-[var(--color-wine-dark)]
+    text-white border-[var(--color-primary-wine)];
+  }
+
+  .btn-back,
+  .btn-refresh,
+  .back-button {
+    @apply bg-white/20 border-2 border-white text-white backdrop-blur-sm
+    hover:bg-white hover:text-[var(--color-primary-green)] hover:border-white
+    shadow-lg;
+  }
+
+  /* Bouton actualiser données dans hero */
+  .hero .btn-refresh,
+  .hero button.btn-refresh {
+    @apply mt-6 bg-white/90 text-[var(--color-primary-green)] border-white
+    font-semibold shadow-xl backdrop-blur-md
+    hover:bg-white hover:scale-105 hover:shadow-2xl;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-sm min-h-[36px];
+  }
+
+  .logout-button {
+    @apply bg-white/20 border-2 border-white text-white
+    hover:bg-white hover:text-[var(--color-primary-green)];
+  }
+
+  .close-modal-btn {
+    @apply bg-transparent border-0 text-gray-500 text-2xl p-2
+    hover:bg-gray-100 hover:text-gray-900;
+  }
+
+  /* Actions de formulaire */
+  .form-actions,
+  .modal-actions {
+    @apply flex flex-col sm:flex-row gap-3 mt-6;
+  }
+
+  .form-actions button,
+  .modal-actions button {
+    @apply flex-1;
+  }
+
+  /* ALERTES */
+  .alert,
+  .alert-success,
+  .alert-danger,
+  .alert-error,
+  .success-banner,
+  .error-banner,
+  .error {
+    @apply px-5 py-4 mb-6 border-2 rounded-lg font-medium;
+  }
+
+  .alert-success,
+  .success-banner {
+    @apply bg-emerald-50 text-emerald-800 border-emerald-300;
+  }
+
+  .alert-danger,
+  .alert-error,
+  .error-banner,
+  .error {
+    @apply bg-red-50 text-red-800 border-red-300;
+  }
+
+  /* CARTES */
+  .card,
+  .collect-card,
+  .stat-card,
+  .action-card,
+  .city-card,
+  .waste-card,
+  .association-card,
+  .register-card,
+  .login-card {
+    @apply bg-white border border-gray-200 rounded-xl p-6
+    shadow-sm transition-all duration-200
+    hover:shadow-md hover:-translate-y-1;
+  }
+
+  .register-card,
+  .login-card {
+    @apply max-w-md mx-auto my-8;
+  }
+
+  .user-info-card {
+    @apply bg-white/10 border-2 border-white/20 rounded-2xl p-6
+    flex flex-col md:flex-row items-center gap-4 text-center md:text-left
+    backdrop-blur-sm;
+  }
+
+  /* Headers de cartes */
+  .card-header,
+  .collect-header,
+  .register-header {
+    @apply text-xl font-bold text-gray-900 mb-4 pb-4 border-b-2 border-gray-200;
+  }
+
+  .collect-header,
+  .register-header {
+    @apply flex justify-between items-center;
+  }
+
+  .register-header h2 {
+    @apply text-gray-900 m-0;
+  }
+
+  .register-header p {
+    @apply text-gray-600 mt-2;
+  }
+
+  /* GRILLES - Mobile First */
+  .global-stats,
+  .stats-bar,
+  .collects-grid,
+  .cities-grid,
+  .actions-container {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-4;
+  }
+
+  .waste-items {
+    @apply flex flex-col gap-3 my-4;
+  }
+
+  /* ITEMS DE WASTE */
+  .waste-item {
+    @apply flex flex-wrap items-center justify-between gap-3
+    p-4 bg-gray-50 border-2 border-gray-200 rounded-xl;
+  }
+
+  .waste-item span:first-child {
+    @apply flex-1 font-semibold text-lg;
+  }
+
+  /* Boutons +/- dans waste items */
+  .waste-item button,
+  .waste-item .btn {
+    @apply w-12 h-12 min-w-[48px] min-h-[48px] px-0 py-0
+    bg-[var(--color-primary-green)] text-white text-2xl font-bold
+    flex items-center justify-center
+    hover:bg-[var(--color-green-dark)] hover:scale-110
+    active:scale-95;
+  }
+
+  .waste-type {
+    @apply text-gray-500;
+  }
+
+  .waste-quantity {
+    @apply font-semibold text-[var(--color-primary-green)];
+  }
+
+  /* STATISTIQUES */
+  .stat-item,
+  .stat-card {
+    @apply text-center;
+  }
+
+  .stat-icon {
+    @apply text-5xl mb-3;
+  }
+
+  .stat-value {
+    @apply text-4xl font-bold text-[var(--color-primary-green)] mb-1 block;
+  }
+
+  .stat-label {
+    @apply text-sm text-gray-600 uppercase tracking-wider block;
+  }
+
+  /* BADGES */
+  .status-badge,
+  .badge-planned,
+  .badge-progress,
+  .badge-completed,
+  .badge-cancelled {
+    @apply px-3 py-1 rounded-full text-xs font-semibold uppercase inline-block;
+  }
+
+  .badge-planned {
+    @apply bg-blue-100 text-blue-800;
+  }
+
+  .badge-progress {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-completed {
+    @apply bg-emerald-100 text-emerald-800;
+  }
+
+  .badge-cancelled {
+    @apply bg-red-100 text-red-800;
+  }
+
+  /* MODALES */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4;
+  }
+
+  .modal,
+  .modal-content {
+    @apply bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl;
+  }
+
+  .modal-header {
+    @apply flex items-center justify-between p-6 border-b-2 border-gray-200;
+  }
+
+  .modal-header h2 {
+    @apply m-0 text-gray-900;
+  }
+
+  .modal-body,
+  .edit-form {
+    @apply p-6;
+  }
+
+  /* LISTES */
+  .volunteer-list,
+  .volonteer-list {
+    @apply list-none p-0 m-0 space-y-4;
+  }
+
+  .volunteer-list li,
+  .volonteer-list li {
+    @apply p-4 bg-white border border-gray-200 rounded-xl;
+  }
+
+  /* LOADING */
+  .loading {
+    @apply text-center py-12 px-4 text-gray-500;
+  }
+
+  .spinner {
+    @apply inline-block w-12 h-12 border-4 border-gray-200 border-t-[var(--color-primary-green)]
+    rounded-full animate-spin mx-auto mb-4;
+  }
+
+  /* ÉTATS VIDES */
+  .empty-state {
+    @apply text-center py-12 px-4 text-gray-500 text-lg;
+  }
+
+  /* USER AVATAR */
+  .user-avatar {
+    @apply w-20 h-20 bg-white text-[var(--color-primary-green)]
+    rounded-full flex items-center justify-center
+    text-3xl font-bold;
+  }
+
+  .user-details {
+    @apply flex-1;
+  }
+
+  .user-name {
+    @apply m-0 mb-2 text-xl font-bold text-white;
+  }
+
+  .user-location,
+  .user-email {
+    @apply my-1 text-[var(--color-green-light)] text-base;
+  }
+
+  .user-actions {
+    @apply flex gap-2 flex-wrap;
+  }
+
+  /* ACTIONS */
+  .actions {
+    @apply flex flex-wrap gap-4 justify-center my-8;
+  }
+
+  .action-card {
+    @apply cursor-pointer flex items-center gap-4;
+  }
+
+  .action-icon {
+    @apply text-4xl flex-shrink-0;
+  }
+
+  .action-content {
+    @apply flex-1 text-left;
+  }
+
+  .action-title {
+    @apply m-0 mb-2 text-lg font-bold text-gray-900;
+  }
+
+  .action-description {
+    @apply m-0 text-gray-600 text-sm leading-relaxed;
+  }
+
+  .action-arrow {
+    @apply text-2xl text-[var(--color-primary-green)];
+  }
+
+  /* COLLECT TOTAL */
+  .collect-total {
+    @apply my-4 p-3 bg-gray-50 rounded-lg text-center text-gray-900;
+  }
+
+  .collect-city {
+    @apply mb-4 text-base text-gray-700;
+  }
+
+  .collect-date {
+    @apply font-semibold text-gray-900;
+  }
+
+  .collect-actions {
+    @apply flex gap-2 mt-4;
+  }
+}
+
+/* =================================
+   UTILITAIRES
+   ================================= */
+@layer utilities {
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+}
+
+/* =================================
+   ANIMATIONS PERSONNALISÉES
+   ================================= */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* =================================
+   RESPONSIVE - Breakpoints Tailwind
+   sm: 640px
+   md: 768px
+   lg: 1024px
+   xl: 1280px
+   ================================= */
+
+/* Mobile: styles par défaut ci-dessus */
+
+/* Tablet et plus */
+@media (min-width: 768px) {
+  .container,
+  .home-container,
+  .login-container,
+  .register-container {
+    @apply px-6 py-10;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .actions-container {
+    @apply grid-cols-2;
+  }
+}
+
+/* =================================
+   ACCESSIBILITÉ
+   ================================= */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mode sombre (optionnel) */
+@media (prefers-color-scheme: dark) {
+  /* Vous pouvez ajouter un mode sombre ici si besoin */
+}

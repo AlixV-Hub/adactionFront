@@ -1,26 +1,52 @@
-
 <div class="home-container">
+  <div class="hero">
+    <h1>BIENVENU.E.S SUR AL'ACTION</h1>
+    <p class="subtitle">Al'action est une association qui sensibilise aux ramassages des déchets sauvages</p>
+  </div>
+
   @if (loading) {
-    <p>Chargement des volontaires...</p>
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Chargement des données...</p>
+    </div>
   }
 
   @if (!loading) {
-    <div class="stats-section">
-      <p>Nombre de bénévoles inscrits : <strong>{{ totalVolunteers }}</strong></p>
-      <h3>Répartition par localisation :</h3>
-      <ul>
-        @for (location of getUniqueLocations(); track location) {
-          <li>{{ location }} : {{ getLocationCount(location) }} volontaires</li>
-        } @empty {
-          <li>Aucune localisation disponible</li>
-        }
-      </ul>
+    <!-- Statistiques globales -->
+    <div class="global-stats">
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">{{ totalVolunteers }}</div>
+        <div class="stat-label">Volontaires</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <div class="stat-value">{{ totalCollects }}</div>
+        <div class="stat-label">Collectes</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">♻️</div>
+        <div class="stat-value">{{ totalWaste.toFixed(1) }} kg</div>
+        <div class="stat-label">Déchets collectés</div>
+      </div>
     </div>
 
+    <!-- Boutons d'action -->
     <div class="actions">
-      <button (click)="onLogin()">Connexion</button>
-      <button (click)="goToAddVolunteer()">S'inscrire</button>
-      <button (click)="goToVolunteers()">Afficher les volontaires</button>
+      <button class="btn btn-primary" (click)="onLogin()">
+        🔐 Connexion
+      </button>
+      <button class="btn btn-success" (click)="goToAddVolunteer()">
+        ➕ S'inscrire
+      </button>
+      <button class="btn btn-info" (click)="goToVolunteers()">
+        👥 Afficher les volontaires
+      </button>
+      <button class="btn btn-warning" (click)="goToCollections()">
+        📦 Afficher les collectes
+      </button>
     </div>
   }
 </div>

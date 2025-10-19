@@ -1,1 +1,104 @@
-<p>collects works!</p>
+<app-secondary-nav
+  title="Liste des Collectes"
+  backRoute="/volunteer-space"
+  backLabel="Mon espace"
+  [showLogout]="true"
+  [showRefresh]="true"
+  (refreshClick)="loadCollects()">
+</app-secondary-nav>
+
+<div class="home-container">
+  <div class="hero">
+    <h1>BIENVENU.E.S SUR AL'ACTION</h1>
+    <p class="subtitle">Al'action est une association qui sensibilise aux ramassages des déchets sauvages</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h2>Liste des collectes</h2>
+  </div>
+
+  <!-- État de chargement -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Chargement des collectes...</p>
+  </div>
+
+  <!-- Message d'erreur -->
+  <div *ngIf="errorMessage && !loading" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Liste des collectes -->
+  <div *ngIf="!loading && !errorMessage">
+
+    <!-- Statistiques -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-value">{{ totalCollects }}</span>
+        <span class="stat-label">collecte(s)</span>
+      </div>
+    </div>
+
+    <!-- Message si aucune collecte -->
+    <div *ngIf="collects.length === 0" class="empty-state">
+      <p>📦 Aucune collecte enregistrée</p>
+    </div>
+
+    <!-- Grille de collectes -->
+    <div *ngIf="collects.length > 0" class="collects-grid">
+      <div
+        *ngFor="let collect of collects"
+        class="collect-card"
+        (click)="viewCollectDetails(collect.id)"
+      >
+        <!-- Header de la carte -->
+        <div class="collect-header">
+          <div class="collect-date">
+            📅 {{ formatDate(collect.collectionDate) }}
+          </div>
+          <span
+            class="status-badge"
+            [ngClass]="getStatusBadgeClass(collect.status)"
+          >
+            {{ getStatusLabel(collect.status) }}
+          </span>
+        </div>
+
+        <!-- Ville -->
+        <div class="collect-city">
+          <strong>📍 {{ collect.city?.name || 'Ville inconnue' }}</strong>
+        </div>
+
+        <!-- Items de déchets -->
+        <div class="waste-items">
+          <div
+            *ngFor="let item of collect.wasteCollectionItems"
+            class="waste-item"
+          >
+            <span class="waste-type">
+              {{ item.wasteType?.name || 'Déchet inconnu' }}
+            </span>
+            <span class="waste-quantity">{{ item.quantity }} kg</span>
+          </div>
+        </div>
+
+        <!-- Total -->
+        <div class="collect-total">
+          <strong>Total : {{ getTotalWeight(collect) }} kg</strong>
+        </div>
+
+        <!-- Actions -->
+        <div class="collect-actions">
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="deleteCollect(collect.id, $event)"
+          >
+            🗑️ Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
