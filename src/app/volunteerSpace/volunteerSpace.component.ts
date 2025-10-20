@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -11,7 +11,7 @@ import {SecondaryNavComponent} from '../shared/secondary-nav/secondary-nav';
 @Component({
   selector: 'app-volunteer-space',
   standalone: true,
-  imports: [CommonModule, FormsModule, SecondaryNavComponent],
+  imports: [FormsModule, SecondaryNavComponent],
   templateUrl: './volunteerSpace.component.html',
   styleUrls: ['./volunteerSpace.component.css']
 })
@@ -41,28 +41,14 @@ export class VolunteerSpaceComponent implements OnInit {
     this.currentVolunteer = this.authService.getCurrentVolunteer();
 
     if (!this.currentVolunteer) {
-      console.warn('⚠️ Non authentifié, redirection vers login');
       this.router.navigate(['/login']);
       return;
     }
-
-    console.log('✅ Volontaire connecté:', this.currentVolunteer);
   }
-
 
   goToCreateCollect(): void {
     this.router.navigate(['/collect']);
   }
-
-  goBack(): void {
-    this.router.navigate(['/home']);
-  }
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/home']);
-  }
-
 
   startEdit(): void {
     this.isEditMode = true;
@@ -104,7 +90,6 @@ export class VolunteerSpaceComponent implements OnInit {
 
     this.volunteerService.updateVolunteer(this.currentVolunteer.id, updatedData).subscribe({
       next: (updated: Volunteer) => {
-        console.log('✅ Profil mis à jour:', updated);
         this.currentVolunteer = updated;
         this.authService.setCurrentVolunteer(updated);
         this.successMessage = 'Profil mis à jour avec succès !';
@@ -116,7 +101,6 @@ export class VolunteerSpaceComponent implements OnInit {
         }, 3000);
       },
       error: (err: any) => {
-        console.error('❌ Erreur mise à jour:', err);
         this.errorMessage = 'Erreur lors de la mise à jour du profil';
         this.isSaving = false;
       }

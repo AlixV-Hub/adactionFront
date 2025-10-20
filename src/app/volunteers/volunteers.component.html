@@ -1,0 +1,62 @@
+<app-secondary-nav
+  title="Liste des Bénévoles"
+  backRoute="/"
+  backLabel="Accueil"
+  [showLogout]="false"
+  [showRefresh]="true"
+  (refreshClick)="loadVolunteers()">
+</app-secondary-nav>
+
+<div class="container">
+  <div class="header">
+    <h2>Liste des bénévoles</h2>
+  </div>
+
+  @if (loading) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Chargement des volontaires...</p>
+    </div>
+  }
+
+  @if (errorMessage && !loading) {
+    <div class="alert alert-danger">{{ errorMessage }}</div>
+  }
+
+  @if (!loading && !errorMessage) {
+    <div>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-value">{{ volunteers.length }}</span>
+          <span class="stat-label">bénévole(s)</span>
+        </div>
+      </div>
+
+      @if (volunteers.length === 0) {
+        <div class="empty-state">
+          <p>👥 Aucun bénévole enregistré</p>
+        </div>
+      }
+
+      @if (volunteers.length > 0) {
+        <div class="collects-grid">
+          @for (volunteer of volunteers; track volunteer.id) {
+            <div class="collect-card volunteer-card">
+              <div class="collect-header">
+                <div class="volunteer-avatar">
+                  {{ volunteer.firstname.charAt(0) }}{{ volunteer.lastname.charAt(0) }}
+                </div>
+              </div>
+
+              <div class="volunteer-info">
+                <h3>{{ volunteer.firstname }} {{ volunteer.lastname }}</h3>
+                <p class="volunteer-location">📍 {{ volunteer.location }}</p>
+                <p class="volunteer-email">📧 {{ volunteer.email }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -53,19 +53,16 @@ export class CollectsComponent implements OnInit {
     this.loading = true;
     this.collectService.getAllCollections().subscribe({
       next: (data: Collection[]) => {
-        // ✅ Trier par date décroissante (plus récent en premier)
+        // Trier par date décroissante (plus récent en premier)
         this.collects = data.sort((a, b) => {
           const dateA = new Date(a.collectionDate).getTime();
           const dateB = new Date(b.collectionDate).getTime();
           return dateB - dateA;
         });
-
         this.totalCollects = data.length;
         this.loading = false;
-        console.log('✅ Collectes chargées et triées:', this.collects.length);
       },
       error: (err: any) => {
-        console.error('❌ Erreur chargement collectes:', err);
         this.errorMessage = 'Erreur lors du chargement des collectes';
         this.loading = false;
       }
@@ -120,9 +117,7 @@ export class CollectsComponent implements OnInit {
   }
 
   viewCollectDetails(collectId: number): void {
-    console.log('Voir détails de la collecte:', collectId);
-    // TODO: Créer une page de détails
-    // this.router.navigate(['/collect', collectId]);
+    this.router.navigate(['/collects', collectId]);
   }
 
   deleteCollect(collectId: number, event: Event): void {

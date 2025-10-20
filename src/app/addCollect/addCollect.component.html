@@ -12,12 +12,6 @@
   </div>
 </div>
 
-<div class="container">
-  <!-- Bouton retour -->
-  <button class="btn btn-back" (click)="goBack()">
-    ← Retour
-  </button>
-
   <h2>Ajouter une collecte</h2>
 
   @if (successMessage) {
@@ -45,7 +39,7 @@
       <label for="city">Ville</label>
       <select
         id="city"
-        [(ngModel)]="cityName"
+        [(ngModel)]="cityId"
         name="city"
         class="form-control"
         required
@@ -96,4 +90,4 @@
       {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer la collecte' }}
     </button>
   </form>
-</div>
+

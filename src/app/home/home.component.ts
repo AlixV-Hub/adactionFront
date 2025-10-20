@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { VolunteerService } from '../services/volunteer.service';
 import { CollectService } from '../services/collect.service';
-import { forkJoin } from 'rxjs';
-import {SecondaryNavComponent} from '../shared/secondary-nav/secondary-nav';
+import { forkJoin } from 'rxjs'; //Charger les volontaires et les collectes en parallèle
 
 interface Volunteer {
   id?: number;
@@ -40,7 +38,7 @@ interface CityStats {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -65,8 +63,6 @@ export class HomeComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-
-    // Charger les volontaires et les collectes en parallèle
     forkJoin({
       volunteers: this.volunteerService.getVolunteers(),
       collects: this.collectService.getAllCollections()
@@ -79,13 +75,6 @@ export class HomeComponent implements OnInit {
         this.totalWaste = this.calculateTotalWaste();
         this.calculateCityStats();
         this.loading = false;
-
-        console.log('✅ Données chargées:', {
-          volontaires: this.totalVolunteers,
-          collectes: this.totalCollects,
-          déchets: this.totalWaste + ' kg',
-          villes: this.cityStats
-        });
       },
       error: (err) => {
         console.error('❌ Erreur chargement données:', err);
@@ -167,30 +156,6 @@ export class HomeComponent implements OnInit {
       .map(v => v.location)
       .filter(loc => loc && loc.trim() !== '');
     return [...new Set(locations)].sort();
-  }
-
-  getLocationVolunteersCount(location: string): number {
-    return this.volunteers.filter(v => v.location === location).length;
-  }
-
-  getLocationCollectsCount(location: string): number {
-    return this.collects.filter(c => {
-      const cityName = c.city?.name || this.getCityNameById(c.city?.id);
-      return cityName === location;
-    }).length;
-  }
-
-  getLocationTotalWaste(location: string): number {
-    let total = 0;
-    this.collects.forEach(collect => {
-      const cityName = collect.city?.name || this.getCityNameById(collect.city?.id);
-      if (cityName === location && collect.wasteCollectionItems) {
-        collect.wasteCollectionItems.forEach(item => {
-          total += item.quantity;
-        });
-      }
-    });
-    return total;
   }
 
   onLogin(): void {

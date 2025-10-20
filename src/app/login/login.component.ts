@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -7,7 +7,7 @@ import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -32,13 +32,11 @@ export class LoginComponent {
 
     this.isSubmitting = true;
 
-    // Appel au service d'authentification
     this.authService.login(this.email, this.password).subscribe({
       next: (volunteer) => {
         this.isSubmitting = false;
 
         if (volunteer) {
-          console.log('✅ Connexion réussie - Redirection vers /volunteer-space');
           this.router.navigate(['/volunteer-space']);
         } else {
           this.errorMessage = 'Email ou mot de passe incorrect';
@@ -46,17 +44,8 @@ export class LoginComponent {
       },
       error: (error) => {
         this.isSubmitting = false;
-        console.error('❌ Erreur de connexion:', error);
         this.errorMessage = 'Erreur de connexion au serveur';
       }
     });
-  }
-
-  goToRegister(): void {
-    this.router.navigate(['/volunteer']);
-  }
-
-  goBack(): void {
-    this.router.navigate(['/home']);
   }
 }

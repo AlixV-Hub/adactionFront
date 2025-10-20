@@ -1,14 +1,14 @@
 
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { VolunteerService } from '../services/volunteer.service';
 
 @Component({
   selector: 'app-addvolunteer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './addVolunteer.component.html',
   styleUrls: ['./addVolunteer.component.css']
 })
@@ -39,12 +39,10 @@ export class AddVolunteerComponent {
 
       this.volunteerService.createVolunteer(this.volunteerForm.value).subscribe({
         next: (res: any) => {
-          console.log('✅ Volontaire ajouté :', res);
           this.successMessage = 'Inscription réussie ! Vous pouvez maintenant vous connecter.';
           this.isSubmitting = false;
           this.volunteerForm.reset();
 
-          // Rediriger vers la page de login
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 2000);

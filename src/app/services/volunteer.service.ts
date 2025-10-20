@@ -21,20 +21,11 @@ export class VolunteerService {
     return this.getAllVolunteers();
   }
 
-
-  getVolunteerById(id: number): Observable<Volunteer> {
-    return this.http.get<Volunteer>(`${this.apiUrl}/${id}`);
-  }
-
   createVolunteer(volunteer: Volunteer): Observable<Volunteer> {
     return this.http.post<Volunteer>(this.apiUrl, volunteer);
   }
 
   updateVolunteer(id: number, volunteer: Volunteer): Observable<Volunteer> {
     return this.http.put<Volunteer>(`${this.apiUrl}/${id}`, volunteer);
-  }
-
-  deleteVolunteer(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

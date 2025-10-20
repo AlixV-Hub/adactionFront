@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Volunteer } from '../models/volunteer.model';
 
@@ -10,8 +10,6 @@ import { Volunteer } from '../models/volunteer.model';
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api';
   private currentVolunteerSubject = new BehaviorSubject<Volunteer | null>(null);
-  public currentVolunteer$ = this.currentVolunteerSubject.asObservable();
-
   constructor(private http: HttpClient) {
     this.loadCurrentVolunteerFromStorage();
   }
@@ -71,8 +69,9 @@ export class AuthService {
     this.currentVolunteerSubject.next(null);
     localStorage.removeItem('currentVolunteer');
   }
-
-  isAuthenticated(): boolean {
-    return this.currentVolunteerSubject.value !== null;
-  }
 }
+
+ // isAuthenticated(): boolean {
+   // return this.currentVolunteerSubject.value !== null;
+  //}
+//}
