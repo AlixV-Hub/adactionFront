@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-secondary-nav',
@@ -15,17 +16,22 @@ export class SecondaryNavComponent {
   @Input() backLabel: string = 'Mon espace';
   @Input() showLogout: boolean = true;
   @Input() showRefresh: boolean = false;
-  @Input() showHome: boolean = true;  // ✅ NOUVEAU paramètre
+  @Input() showHome: boolean = true;
   @Output() refreshClick = new EventEmitter<void>();
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {
+    console.log('🔧 SecondaryNavComponent initialisé');
+  }
 
   goBack(): void {
     this.router.navigate([this.backRoute]);
   }
 
   goToHome(): void {
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 
   refresh(): void {
@@ -33,8 +39,16 @@ export class SecondaryNavComponent {
   }
 
   logout(): void {
-    localStorage.removeItem('currentVolunteerId');
-    localStorage.removeItem('currentVolunteer');
-    this.router.navigate(['/']);
+
+    try {
+      this.authService.logout();
+      localStorage.clear();
+      this.router.navigate(['/home']).then(() => {
+        window.location.reload();
+      });
+
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error);
+    }
   }
 }

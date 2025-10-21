@@ -10,13 +10,12 @@ import { Volunteer } from '../models/volunteer.model';
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api';
   private currentVolunteerSubject = new BehaviorSubject<Volunteer | null>(null);
+
   constructor(private http: HttpClient) {
     this.loadCurrentVolunteerFromStorage();
   }
 
   login(email: string, password: string): Observable<Volunteer | null> {
-    this.logout();
-
     console.log('📤 Envoi de la requête de login pour:', email);
 
     return this.http.post<Volunteer>(`${this.apiUrl}/auth/login`, { email, password }).pipe(
@@ -66,12 +65,22 @@ export class AuthService {
     if (currentUser) {
       console.log('👋 Déconnexion de:', currentUser.firstname, currentUser.lastname);
     }
+
+    // Réinitialiser le BehaviorSubject
     this.currentVolunteerSubject.next(null);
+
+    // Nettoyer le localStorage
     localStorage.removeItem('currentVolunteer');
+    localStorage.removeItem('currentVolunteerId');
+
+    console.log('✅ Session nettoyée dans AuthService');
+  }
+
+  isAuthenticated(): boolean {
+    return this.currentVolunteerSubject.value !== null;
+  }
+
+  getCurrentVolunteer$(): Observable<Volunteer | null> {
+    return this.currentVolunteerSubject.asObservable();
   }
 }
-
- // isAuthenticated(): boolean {
-   // return this.currentVolunteerSubject.value !== null;
-  //}
-//}

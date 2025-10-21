@@ -1,12 +1,10 @@
-
 import { Component, OnInit } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { VolunteerService } from '../services/volunteer.service';
 import { Volunteer } from '../models/volunteer.model';
-import {SecondaryNavComponent} from '../shared/secondary-nav/secondary-nav';
+import { SecondaryNavComponent } from '../shared/secondary-nav/secondary-nav';
 
 @Component({
   selector: 'app-volunteer-space',
@@ -16,14 +14,7 @@ import {SecondaryNavComponent} from '../shared/secondary-nav/secondary-nav';
   styleUrls: ['./volunteerSpace.component.css']
 })
 export class VolunteerSpaceComponent implements OnInit {
-  isOnMySpace: any;
-  loadData: any;
-  goToMySpace() {
-      throw new Error("Method not implemented.");
-  }
   currentVolunteer: Volunteer | null = null;
-
-
   isEditMode: boolean = false;
   editForm: Partial<Volunteer> = {};
   isSaving: boolean = false;
@@ -37,7 +28,6 @@ export class VolunteerSpaceComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
     this.currentVolunteer = this.authService.getCurrentVolunteer();
 
     if (!this.currentVolunteer) {
@@ -79,7 +69,6 @@ export class VolunteerSpaceComponent implements OnInit {
     this.successMessage = '';
     this.errorMessage = '';
 
-
     const updatedData: Volunteer = {
       id: this.currentVolunteer.id,
       firstname: this.editForm.firstname || this.currentVolunteer.firstname,
@@ -106,7 +95,6 @@ export class VolunteerSpaceComponent implements OnInit {
       }
     });
   }
-
 
   getInitials(): string {
     if (!this.currentVolunteer) return '?';
