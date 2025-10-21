@@ -4,7 +4,7 @@
   backLabel="Mon espace"
   [showBackButton]="true"
   [showHome]="true"
-  [showLogout]="false"
+  [showLogout]="true"
   [showRefresh]="false">
 </app-secondary-nav>
 
@@ -44,7 +44,7 @@
       @if (collects.length > 0) {
         <div class="collects-grid">
           @for (collect of collects; track collect.id) {
-            <div class="collect-card" (click)="viewCollectDetails(collect.id)">
+            <div class="collect-card">
 
               <div class="collect-header">
                 <div class="collect-date">
