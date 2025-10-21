@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './secondary-nav.html',
   styleUrl: './secondary-nav.css'
 })
-export class SecondaryNavComponent {
+export class SecondaryNavComponent implements OnInit {
   @Input() title: string = 'Espace Bénévole';
   @Input() showBackButton: boolean = true;
   @Input() backRoute: string = '/volunteer-space';
@@ -19,11 +19,22 @@ export class SecondaryNavComponent {
   @Input() showHome: boolean = true;
   @Output() refreshClick = new EventEmitter<void>();
 
+  isAuthenticated: boolean = false;
+
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {
-    console.log('🔧 SecondaryNavComponent initialisé');
+  ) {}
+
+  ngOnInit(): void {
+    this.isAuthenticated = this.authService.isAuthenticated();
+  }
+
+  shouldShowBackButton(): boolean {
+    if (this.backRoute === '/volunteer-space') {
+      return this.showBackButton && this.isAuthenticated;
+    }
+    return this.showBackButton;
   }
 
   goBack(): void {
@@ -46,9 +57,8 @@ export class SecondaryNavComponent {
       this.router.navigate(['/home']).then(() => {
         window.location.reload();
       });
-
     } catch (error) {
-      console.error('Erreur lors de la déconnexion:', error);
+      console.error('❌ Erreur lors de la déconnexion:', error);
     }
   }
 }

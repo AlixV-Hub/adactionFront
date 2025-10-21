@@ -14,7 +14,7 @@
         </button>
       }
 
-      @if (showBackButton) {
+      @if (shouldShowBackButton()) {
         <button
           (click)="goBack()"
           type="button"
@@ -34,7 +34,7 @@
         </button>
       }
 
-      @if (showLogout) {
+      @if (showLogout && isAuthenticated) {
         <button
           (click)="logout()"
           type="button"
