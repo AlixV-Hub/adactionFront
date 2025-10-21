@@ -1,18 +1,19 @@
 <app-secondary-nav
-  title="Al'Action"
-  [showBackButton]="false"
-  [showLogout]="false"
-  [showRefresh]="true">
+  title="Ajouter une collecte"
+  backRoute="/volunteer-space"
+  backLabel="Retour à mon espace"
+  [showBackButton]="true"
+  [showHome]="true"
+  [showLogout]="true"
+  [showRefresh]="false"
+  >
 </app-secondary-nav>
 
 <div class="home-container">
   <div class="hero">
-    <h1>BIENVENU.E.S SUR AL'ACTION</h1>
-    <p class="subtitle">Al'action est une association qui sensibilise aux ramassages des déchets sauvages</p>
+    <p>AJOUTER UNE COLLECTE</p>
   </div>
 </div>
-
-  <h2>Ajouter une collecte</h2>
 
   @if (successMessage) {
     <div class="alert alert-success">{{ successMessage }}</div>

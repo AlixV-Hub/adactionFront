@@ -3,43 +3,47 @@
     <span class="brand">♻️ {{ title }}</span>
 
     <div class="nav-actions">
-      <button
-        [@if]="showRefresh"
-        (click)="refresh()"
-        type="button"
-        class="refresh-btn"
-        aria-label="Actualiser les données"
-      >
-        🔄 Actualiser
-      </button>
+      @if (showRefresh) {
+        <button
+          (click)="refresh()"
+          type="button"
+          class="refresh-btn"
+          aria-label="Actualiser les données"
+        >
+          🔄 Actualiser
+        </button>
+      }
 
-      <button
-        [@if]="showBackButton"
-        (click)="goBack()"
-        type="button"
-        aria-label="Retour"
-      >
-        ← {{ backLabel }}
-      </button>
+      @if (showBackButton) {
+        <button
+          (click)="goBack()"
+          type="button"
+          aria-label="Retour"
+        >
+          ⬅️ {{ backLabel }}
+        </button>
+      }
 
-      <button
-        (click)="goToHome()"
-        type="button"
-        aria-label="Retour à l'accueil"
-      >
-        🏠 Accueil
-      </button>
+      @if (showHome) {
+        <button
+          (click)="goToHome()"
+          type="button"
+          aria-label="Retour à l'accueil"
+        >
+          🏠 Accueil
+        </button>
+      }
 
-
-      <button
-        [@if]="showLogout"
-        (click)="logout()"
-        type="button"
-        class="logout-btn"
-        aria-label="Se déconnecter"
-      >
-        🚪 Déconnexion
-      </button>
+      @if (showLogout) {
+        <button
+          (click)="logout()"
+          type="button"
+          class="logout-btn"
+          aria-label="Se déconnecter"
+        >
+          🚪 Déconnexion
+        </button>
+      }
     </div>
   </div>
 </nav>

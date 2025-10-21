@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,6 +15,7 @@ export class SecondaryNavComponent {
   @Input() backLabel: string = 'Mon espace';
   @Input() showLogout: boolean = true;
   @Input() showRefresh: boolean = false;
+  @Input() showHome: boolean = true;  // ✅ NOUVEAU paramètre
   @Output() refreshClick = new EventEmitter<void>();
 
   constructor(private router: Router) {}

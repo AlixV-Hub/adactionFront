@@ -76,35 +76,7 @@ export class CollectsComponent implements OnInit {
     return collect.wasteCollectionItems.reduce((sum, item) => sum + item.quantity, 0);
   }
 
-  getStatusBadgeClass(status: string): string {
-    switch (status) {
-      case 'PLANNED':
-        return 'badge-planned';
-      case 'IN_PROGRESS':
-        return 'badge-progress';
-      case 'COMPLETED':
-        return 'badge-completed';
-      case 'CANCELLED':
-        return 'badge-cancelled';
-      default:
-        return 'badge-default';
-    }
-  }
 
-  getStatusLabel(status: string): string {
-    switch (status) {
-      case 'PLANNED':
-        return 'Planifiée';
-      case 'IN_PROGRESS':
-        return 'En cours';
-      case 'COMPLETED':
-        return 'Terminée';
-      case 'CANCELLED':
-        return 'Annulée';
-      default:
-        return status;
-    }
-  }
 
   formatDate(dateString: string): string {
     if (!dateString) return '';
