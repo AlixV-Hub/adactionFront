@@ -1,6 +1,5 @@
-
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { VolunteerService } from '../services/volunteer.service';
 
@@ -16,6 +15,8 @@ export class AddVolunteerComponent {
   successMessage: string = '';
   errorMessage: string = '';
   isSubmitting: boolean = false;
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -27,7 +28,29 @@ export class AddVolunteerComponent {
       lastname: ['', Validators.required],
       location: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
+    }, {
+      validators: this.passwordMatchValidator
     });
+  }
+
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+
+    if (password && confirmPassword && password !== confirmPassword) {
+      return { passwordMismatch: true };
+    }
+    return null;
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   onSubmit() {
@@ -36,7 +59,10 @@ export class AddVolunteerComponent {
       this.errorMessage = '';
       this.successMessage = '';
 
-      this.volunteerService.createVolunteer(this.volunteerForm.value).subscribe({
+      const formData = { ...this.volunteerForm.value };
+      delete formData.confirmPassword;
+
+      this.volunteerService.createVolunteer(formData).subscribe({
         next: (res: any) => {
           this.successMessage = 'Inscription réussie ! Vous pouvez maintenant vous connecter.';
           this.isSubmitting = false;

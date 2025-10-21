@@ -1,11 +1,8 @@
-
 <div class="register-container">
   <div class="register-card">
     <div class="register-header">
       <h2>📝 Inscription Bénévole</h2>
-      <p>Rejoignez nous</p>
     </div>
-
 
     @if (successMessage) {
       <div class="alert alert-success">
@@ -82,6 +79,57 @@
         />
         @if (volunteerForm.get('email')?.invalid && volunteerForm.get('email')?.touched) {
           <span class="error-text">Email valide requis</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">🔒 Mot de passe</label>
+        <div class="password-input-wrapper">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="Mot de passe"
+            [disabled]="isSubmitting"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="togglePasswordVisibility()"
+            [disabled]="isSubmitting"
+          >
+            {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+        @if (volunteerForm.get('password')?.invalid && volunteerForm.get('password')?.touched) {
+          <span class="error-text">Le mot de passe est requis</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">🔒 Confirmer le mot de passe</label>
+        <div class="password-input-wrapper">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            placeholder="Confirmer le mot de passe"
+            [disabled]="isSubmitting"
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="toggleConfirmPasswordVisibility()"
+            [disabled]="isSubmitting"
+          >
+            {{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+        @if (volunteerForm.get('confirmPassword')?.invalid && volunteerForm.get('confirmPassword')?.touched) {
+          <span class="error-text">La confirmation du mot de passe est requise</span>
+        }
+        @if (volunteerForm.errors?.['passwordMismatch'] && volunteerForm.get('confirmPassword')?.touched) {
+          <span class="error-text">Les mots de passe ne correspondent pas</span>
         }
       </div>
 
